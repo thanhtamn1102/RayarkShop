@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Role;
 import vn.edu.iuh.fit.rayarkshop.services.AccountService;
@@ -19,8 +20,10 @@ public class LoginPageController {
     private AccountService accountService;
 
     @GetMapping("")
-    public String loginPage() {
-        return "/login";
+    public ModelAndView loginPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
     }
 
     @GetMapping("/success")
