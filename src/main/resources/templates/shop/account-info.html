@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản của tôi</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/account.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/account.js}"></script>
+</head>
+<body>
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row">
+                <div th:replace="shop/fragments/user-account-left-nav :: user-account-left-nav"></div>
+
+                <div class="col-10 bg-white rounded">
+                    <fieldset class="m-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <legend class="m-0">Hồ Sơ Của Tôi</legend>
+                                    <p class="m-0">Quản lí thông tin hồ sơ của bạn</p>
+                                </div>
+                            </div>
+                            <div class="row py-4">
+                                <div class="col-12">
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <form>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label for="txtUserName">Tên tài khoản</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input type="text" class="form-control" id="txtUserName" th:value="${account.userName}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label for="txtFullName">Họ tên</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input type="text" class="form-control" id="txtFullName" th:value="${person.firstName}">
+                                                <div class="form-text" id="FullNameNotification"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label for="txtEmail">Email</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input type="text" class="form-control-plaintext" id="txtEmail" th:value="${account.email}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label for="txtPassword">Mật Khẩu</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <input type="password" id="txtPassword" class="form-control border-0" th:value="${account.hashPass}" disabled>
+                                                    </div>
+                                                    <div class="col-8 align-self-center">
+                                                        <button type="button" class="btn text-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu?</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label for="txtPhoneNumber">Số điện thoại</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input type="text" class="form-control" id="txtPhoneNumber" th:value="${person.phone}">
+                                                <div class="form-text" id="PhoneNotification"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label>Giới Tính</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="gender form-check-inline">
+                                                    <input type="radio" class="me-1 form-check-input" id="male" th:checeked="${person.gender == true}">
+                                                    <label for="male" class="me-2 form-check-label">Nam</label>
+                                                </div>
+                                                <div class="gender form-check-inline">
+                                                    <input type="radio" class="me-1 form-check-input" id="female" th:checked="${person.gender == false}">
+                                                    <label for="female" class="me-2 form-check-label">Nữ</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-2 text-end align-self-center">
+                                                <label>Ngày Sinh</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input type="date" id="dayOfBirth" th:value="${person.birthday}"
+                                                       style="border: 1px solid #ced4da; border-radius: 5px; padding: 4px 10px 4px 10px;">
+                                                <div class="form-text" id="DayOfBirthNotification"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row py-2">
+                                            <div class="col-12 text-center">
+                                                <button type="button" id="btnUpdate" class="btn btn-primary px-4 mx-2">Cập Nhật</button>
+                                                <a href="/logout" type="button" id="btnLogout" class="btn btn-warning px-4 mx-2">Đăng Xuất</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <form id="formUploadAvatar">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input hidden type="file" name="file" id="uploadAvatarInput">
+                                                <img class="avatarImage border rounded-circle"
+                                                     th:src="${account.avatar}" style="width: 170px;"
+                                                     th:if="${account.avatar != null && account.avatar.isEmpty() == false}">
+                                                <img class="avatarImage"
+                                                     th:src="@{/img/icon-user.jpg}" style="width: 170px;"
+                                                     th:unless="${account.avatar != null && account.avatar.isEmpty() == false}">
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary my-3" id="btnUploadImage">Upload Image</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+
+
+        <div id="notification">
+            <span id="message"></span>
+        </div>
+
+        <div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Thay đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="txtCurrentPassword" class="form-label">Mật khẩu hiện tại</label>
+                                <input type="password" class="form-control" id="txtCurrentPassword">
+                                <div id="currentPasswordNotification" class="form-text"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtNewPassword" class="form-label">Mật khẩu mới</label>
+                                <input type="password" class="form-control" id="txtNewPassword">
+                                <div id="newPasswordNotification" class="form-text"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="txtConfirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                                <input type="password" class="form-control" id="txtConfirmNewPassword">
+                                <div id="confirmPasswordNotification" class="form-text"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary" id="btnSaveChangePassword">Hoàn thành</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

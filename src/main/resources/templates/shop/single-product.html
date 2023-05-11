@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+<!-- single-product31:30-->
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge" />
+	<title>
+		Sản phẩm - Rayark
+	</title>
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+	<!-- Material Design Iconic Font-V2.2.0 -->
+	<link rel="stylesheet" th:href="@{/css/material-design-iconic-font.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/cart.css}" />
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+	<!-- Font Awesome Stars-->
+	<link rel="stylesheet" th:href="@{/css/fontawesome-stars.css}" />
+	<!-- Meanmenu CSS -->
+	<link rel="stylesheet" th:href="@{/css/meanmenu.css}" />
+	<!-- owl carousel CSS -->
+	<link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}" />
+	<!-- Slick Carousel CSS -->
+	<link rel="stylesheet" th:href="@{/css/slick.css}" />
+	<!-- Animate CSS -->
+	<link rel="stylesheet" th:href="@{/css/animate.css}" />
+	<!-- Jquery-ui CSS -->
+	<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}" />
+	<!-- Venobox CSS -->
+	<link rel="stylesheet" th:href="@{/css/venobox.css}" />
+	<!-- Nice Select CSS -->
+	<link rel="stylesheet" th:href="@{/css/nice-select.css}" />
+	<!-- Magnific Popup CSS -->
+	<link rel="stylesheet" th:href="@{/css/magnific-popup.css}" />
+	<!-- Helper CSS -->
+	<link rel="stylesheet" th:href="@{/css/helper.css}" />
+	<!-- Main Style CSS -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<!-- Responsive CSS -->
+	<link rel="stylesheet" th:href="@{/css/responsive.css}" />
+	<!-- Modernizr js -->
+
+
+	<script src="../js/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/all.css}" />
+	<link rel="stylesheet" th:href="@{/css/single-product.css}">
+	<script src="../js/vendor/modernizr-2.8.3.min.js"></script>
+	<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/south-street/jquery-ui.css"
+		rel="stylesheet" />
+	<link type="text/css" rel="stylesheet" th:href="@{/css/single-product.css}">
+
+</head>
+
+<body>
+	<input hidden id="isVariations" th:value="${product.productVariations != null && product.productVariations.size() > 0 ? true : false}">
+	<!--[if lt IE 8]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+        your experience.
+      </p>
+    <![endif]-->
+	<!-- Begin Body Wrapper -->
+	<div class="body-wrapper wrapper container-fluid p-0">
+		<div th:replace="shop/fragments/header :: header"></div>
+		<!-- Li's Breadcrumb Area End Here -->
+		<!-- content-wraper start -->
+		<div class="content-wraper px-5 py-3">
+			<div class="container">
+				<div class="row single-product-area">
+					<div class="col-lg-5 col-md-6">
+						<!-- Product Details Left -->
+						<div class="product-details-left">
+							<div class="product-details-images slider-navigation-1">
+								<th:block th:each="productPhoto : ${product.productPhotos}">
+									<div class="lg-image">
+										<a class="popup-img venobox vbox-item" th:href="${productPhoto.largePhoto}"
+										   data-gall="myGallery">
+											<img th:src="${productPhoto.largePhoto}" th:alt="${productPhoto.largePhotoFileName}" />
+										</a>
+									</div>
+								</th:block>
+							</div>
+							<div class="product-details-thumbs slider-thumbs-1">
+								<th:block th:each="productPhoto : ${product.productPhotos}">
+									<div class="sm-image">
+										<img th:src="${productPhoto.thumbNailPhoto}" th:alt="${productPhoto.thumbNailPhotoFileName}" />
+									</div>
+								</th:block>
+							</div>
+						</div>
+						<!--// Product Details Left -->
+					</div>
+
+					<div class="col-lg-7 col-md-6">
+						<div class="product-details-view-content pt-60">
+							<div class="product-info">
+								<h2 class="product-name" th:text="${product.name}"></h2>
+								<div class="rating-box pt-20">
+									<label th:unless="${product.averageRatting != null && product.averageRatting > 0}">Chưa có đánh giá</label>
+									<ul class="rating" th:if="${product.averageRatting != null && product.averageRatting > 0}">
+										<label class="text-warning fs-6 ratting ratting1" value="1">
+											<i class="fas fa-star"></i>
+										</label>
+
+										<label class="text-warning fs-6 ratting ratting2" value="2">
+											<i th:if="${product.averageRatting < 2}" class="far fa-star"></i>
+											<i th:if="${product.averageRatting >= 2}" class="fas fa-star"></i>
+										</label>
+
+										<label class="text-warning fs-6 ratting ratting3" value="3">
+											<i th:if="${product.averageRatting < 3}" class="far fa-star"></i>
+											<i th:if="${product.averageRatting >= 3}" class="fas fa-star"></i>
+										</label>
+
+										<label class="text-warning fs-6 ratting ratting4" value="4">
+											<i th:if="${product.averageRatting < 4}" class="far fa-star"></i>
+											<i th:if="${product.averageRatting >= 4}" class="fas fa-star"></i>
+										</label>
+
+										<label class="text-warning fs-6 ratting ratting5" value="5">
+											<i th:if="${product.averageRatting < 5}" class="far fa-star"></i>
+											<i th:if="${product.averageRatting >= 5}" class="fas fa-star"></i>
+										</label>
+									</ul>
+								</div>
+<!--								<div class="endow">-->
+<!--									<h5><u>Ưu đãi đặc biệt khi mua sản phẩm</u></h5>-->
+<!--									<ul>-->
+<!--										<li>Tặng túi chống sốc trị giá 390.000</li>-->
+<!--										<li><span style="font-weight: 400">Giảm giá <span style="color: #ff0000"><strong>500K</strong>-->
+<!--										</span>đối với học sinh, sinh viên khi trực tiếp mua hàng tại các cơ sở của Surface Việt ( Tính từ học sinh lớp 8 trở lên)</span></li>-->
+<!--										<li>Cài đặt máy miễn phí trọn đời</li>-->
+<!--										<li>Bảo hành <span style="color: #ff0000"><strong>12</strong></span> tháng với máy likenew</li>-->
+<!--										<li>Máy nhập khẩu Microsoft</li>-->
+<!--										<li>Miễn phí vận chuyển toàn quốc</li>-->
+<!--										<li>Nhận máy chỉ trong <strong><span style="color: #ff0000">60</span></strong> phút tại Hà nội, TP.HCM, Đà Nẵng</li>-->
+<!--										<li><span style="font-weight: 400">Hỗ trợ nâng cấp máy đời mới nhất</span></li>-->
+<!--									</ul>-->
+<!--								</div>-->
+
+<!--								th:checked="${iterStat ? true : false}"-->
+<!--								th:disable="${productVariation.productInventory.quantity == 0 ? true : false}"-->
+
+<!--								<th:block th:each="productVariation, iterStat : ${product.productVariations}">-->
+<!--									<label class="btn btn-outline-primary btn-primary active rounded mx-1">-->
+<!--										<input 	type="radio" name="options" autocomplete="off">-->
+<!--										<span th:text="${productVariation.name}"></span>-->
+<!--									</label>-->
+<!--								</th:block>-->
+
+								<div 	class="product-variants"
+										th:if="${product.productOptions != null && product.productOptions.size() > 0}">
+									<h5>Options</h5>
+									<p class="text-danger" id="optionNotification"></p>
+									<th:block th:each="productOption : ${product.productOptions}">
+										<div class="produt-variants-size my-2">
+											<h6 th:text="${productOption.name}"></h6>
+											<div class="row">
+												<div class="col-12">
+													<div class="size-options btn-group form-option" role="group" data-toggle="buttons">
+														<th:block th:each="optionValue, iterStat : ${productOption.optionValues}">
+															<label class="btnOption btn btn-outline-primary rounded mx-1">
+																<input hidden type="radio" name="options" autocomplete="off"
+																	   class="optionCheck"
+																	   th:option-id="${productOption.id}"
+																	   th:option-value-id="${optionValue.id}"
+																	   th:text="${optionValue.value}">
+															</label>
+														</th:block>
+													</div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+								</div>
+								<div class="price-box pt-3 m-0">
+									<span class="new-price new-price-2" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+								</div>
+								<div class="single-add-to-cart">
+<!--									<form action="#" class="cart-quantity">-->
+										<div class="quantity">
+											<label>Số lượng</label>
+											<div class="cart-plus-minus">
+												<input class="txtQuantity cart-plus-minus-box" value="1" type="text" />
+												<div class="dec qtybutton">
+													<i class="fa fa-angle-down"></i>
+												</div>
+												<div class="inc qtybutton">
+													<i class="fa fa-angle-up"></i>
+												</div>
+											</div>
+										</div>
+										<button class="btnAddToCart add-to-cart btn btn-danger" type="button">
+											THÊM VÀO GIỎ HÀNG
+										</button>
+<!--									</form>-->
+								</div>
+								<div class="product-additional-info pt-25">
+									<a th:class="${favoriteProduct ? 'wishlist-btn btnAddToFavoriteList text-danger' : 'wishlist-btn btnAddToFavoriteList'} "
+									   th:product-id="${product.id}"
+									   th:favoriteCheck="${favoriteProduct}">
+										<i class="fa fa-heart"></i>
+										<span>Thêm vào danh sách yêu thích</span>
+									</a>
+									<div class="product-social-sharing pt-25">
+										<ul>
+											<li class="facebook">
+												<a href="#"><i class="fa fa-facebook"></i>Facebook</a>
+											</li>
+											<li class="twitter">
+												<a href="#"><i class="fa fa-twitter"></i>Twitter</a>
+											</li>
+											<li class="google-plus">
+												<a href="#"><i class="fa fa-google-plus"></i>Google +</a>
+											</li>
+											<li class="instagram">
+												<a href="#"><i class="fa fa-instagram"></i>Instagram</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="block-reassurance">
+									<div class="row">
+										<div class="col-4">
+											<div class="reassurance-item">
+												<div class="reassurance-icon">
+													<i class="fa fa-check-square-o"></i>
+												</div>
+												<p>Chính sách bảo mật</p>
+											</div>
+										</div>
+										<div class="col-4">
+											<div class="reassurance-item">
+												<div class="reassurance-icon">
+													<i class="fa fa-truck"></i>
+												</div>
+												<p>Chính sách giao hàng</p>
+											</div>
+										</div>
+										<div class="col-4">
+											<div class="reassurance-item">
+												<div class="reassurance-icon">
+													<i class="fa fa-exchange"></i>
+												</div>
+												<p>Chính sách hoàn trả</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- content-wraper end -->
+		<!-- Begin Product Area -->
+		<div class="product-area pt-35 px-5 py-3">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button class="nav-link fw-bold active" id="home-tab" data-bs-toggle="tab" data-bs-target="#description"
+									type="button" role="tab" aria-controls="home" aria-selected="true">Mô tả</button>
+							</li>
+<!--							<li class="nav-item" role="presentation">-->
+<!--								<button class="nav-link fw-bold" id="profile-tab" data-bs-toggle="tab" data-bs-target="#product-details"-->
+<!--									type="button" role="tab" aria-controls="profile" aria-selected="false">Thông tin chi tiết sản-->
+<!--									phẩm</button>-->
+<!--							</li>-->
+							<li class="nav-item" role="presentation">
+								<button class="nav-link fw-bold" id="contact-tab" data-bs-toggle="tab" data-bs-target="#reviews"
+									type="button" role="tab" aria-controls="contact" aria-selected="false">Đánh giá</button>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="home-tab">
+								<div class="product-desc mt-4">
+									<div class="detailed-product-description" th:text="${product.description}"></div>
+								</div>
+							</div>
+<!--							<div class="tab-pane fade" id="product-details" role="tabpanel" aria-labelledby="profile-tab">-->
+<!--								<div class="product-details-manufacturer">-->
+<!--									<h5 class="fw-bold ms-2 mb-3">Thông số kỹ thuật Surface Pro 7 Core I3 / 4GB / 128GB TM420IA EC031T</h5>-->
+<!--									<table class="table table-borderless">-->
+<!--										<thead></thead>-->
+<!--										<tbody>-->
+<!--											<tr>-->
+<!--												<td><strong>Loại CPU</strong></td>-->
+<!--												<td>10th Gen Intel® Core™ i5-1035G4</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Loại card đồ họa</strong></td>-->
+<!--												<td>Intel® Iris® Plus Graphics</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Ổ cứng</strong></td>-->
+<!--												<td>128GB BGA PCIe SSD</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Kích thước màn hình</strong></td>-->
+<!--												<td>12.3 inches</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Độ phân giải màn hình</strong></td>-->
+<!--												<td>2736 x 1824 pixels</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Cổng giao tiếp</strong></td>-->
+<!--												<td>x1 Surface Connect, x1 Headset jack, x1 Cover port</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Hệ điều hành</strong></td>-->
+<!--												<td>Windows 10 Home</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Pin</strong></td>-->
+<!--												<td>43.2 Wh, 60W power supply with USB-A (5W) (65W total) , Supports Fast Charge-->
+<!--													(0-80% in just over one hour)</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Kích thước</strong></td>-->
+<!--												<td>292 mm x 201 mm x 8.5 mm</td>-->
+<!--											</tr>-->
+<!--											<tr>-->
+<!--												<td><strong>Công nghệ màn hình</strong></td>-->
+<!--												<td>PixelSense™ Display , Aspect ratio: 3:2</td>-->
+<!--											</tr>-->
+<!--										</tbody>-->
+<!--									</table>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="contact-tab">
+								<div class="product-reviews">
+									<div class="product-details-comment-block">
+										<th:block th:each="productReview : ${productReviews}">
+											<div class="reivew-item row my-2">
+												<div class="col-1 text-end">
+													<img th:src="@{/img/icon-user.jpg}" width="40px"/>
+												</div>
+												<div class="col-11 px-2">
+													<label class="username fw-bold" th:text="${productReview.customer.person.firstName}"></label>
+													<div class="form-ratting">
+														<label class="text-warning fs-6 ratting ratting1" value="1">
+															<i class="fas fa-star"></i>
+														</label>
+
+														<label class="text-warning fs-6 ratting ratting2" value="2">
+															<i th:if="${productReview.rating < 2}" class="far fa-star"></i>
+															<i th:if="${productReview.rating >= 2}" class="fas fa-star"></i>
+														</label>
+
+														<label class="text-warning fs-6 ratting ratting3" value="3">
+															<i th:if="${productReview.rating < 3}" class="far fa-star"></i>
+															<i th:if="${productReview.rating >= 3}" class="fas fa-star"></i>
+														</label>
+
+														<label class="text-warning fs-6 ratting ratting4" value="4">
+															<i th:if="${productReview.rating < 4}" class="far fa-star"></i>
+															<i th:if="${productReview.rating >= 4}" class="fas fa-star"></i>
+														</label>
+
+														<label class="text-warning fs-6 ratting ratting5" value="5">
+															<i th:if="${productReview.rating < 5}" class="far fa-star"></i>
+															<i th:if="${productReview.rating >= 5}" class="fas fa-star"></i>
+														</label>
+													</div>
+													<p th:text="${productReview.reviewDate.toString()}"></p>
+													<label th:if="${productReview.comment.isEmpty() == false}"
+														   th:text="${productReview.comment}"></label>
+													<div class="product-review-images-container">
+														<th:block th:each="productReviewImage : ${productReview.productReviewImages}">
+															<a th:href="${productReviewImage.path}" target="_blank">
+																<img class="rounded" style="width: 120px; height: 120px; object-fit: cover;" th:src="${productReviewImage.path}">
+															</a>
+														</th:block>
+													</div>
+												</div>
+											</div>
+										</th:block>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Product Area End Here -->
+		<!-- Begin Li's Laptop Product Area -->
+		<section class="product-area li-laptop-product pt-30 pb-50 px-5 py-3">
+			<div class="container">
+				<div class="row">
+					<!-- Begin Li's Section Area -->
+					<div class="col-lg-12">
+						<div class="li-section-title">
+							<h2>
+								<span>Sản phẩm cùng danh mục</span>
+							</h2>
+						</div>
+						<div class="row">
+							<div class="product-active owl-carousel">
+								<th:block th:each="product : ${productFromCategory}">
+									<div class="col-lg-12">
+										<!-- single-product-wrap start -->
+										<div class="single-product-wrap">
+											<div class="product-image">
+												<a th:href="@{/products/{id}(id=${product.id})}">
+													<img th:if="${product.productPhotos != null and product.productPhotos.size() > 0}"
+														 th:src="${product.productPhotos.get(0).thumbNailPhoto}" th:alt="${product.name}">
+													<img th:unless="${product.productPhotos != null and product.productPhotos.size() > 0}"
+														 src="https://kecamatanpangalengan.bandungkab.go.id/img/no-image.png" th:alt="${product.name}">
+												</a>
+												<span class="sticker">New</span>
+											</div>
+											<div class="product_desc">
+												<div class="product_desc_info">
+													<div class="product-review">
+														<h5 class="manufacturer">
+															<a href="product-details.html" th:text="${product.productCategories.get(0).name}"></a>
+														</h5>
+														<div class="rating-box">
+															<label th:unless="${product.averageRatting != null && product.averageRatting > 0}">Chưa có đánh giá</label>
+															<ul class="rating" th:if="${product.averageRatting != null && product.averageRatting > 0}">
+																<label class="text-warning fs-6 ratting ratting1" value="1">
+																	<i class="fas fa-star"></i>
+																</label>
+
+																<label class="text-warning fs-6 ratting ratting2" value="2">
+																	<i th:if="${product.averageRatting < 2}" class="far fa-star"></i>
+																	<i th:if="${product.averageRatting >= 2}" class="fas fa-star"></i>
+																</label>
+
+																<label class="text-warning fs-6 ratting ratting3" value="3">
+																	<i th:if="${product.averageRatting < 3}" class="far fa-star"></i>
+																	<i th:if="${product.averageRatting >= 3}" class="fas fa-star"></i>
+																</label>
+
+																<label class="text-warning fs-6 ratting ratting4" value="4">
+																	<i th:if="${product.averageRatting < 4}" class="far fa-star"></i>
+																	<i th:if="${product.averageRatting >= 4}" class="fas fa-star"></i>
+																</label>
+
+																<label class="text-warning fs-6 ratting ratting5" value="5">
+																	<i th:if="${product.averageRatting < 5}" class="far fa-star"></i>
+																	<i th:if="${product.averageRatting >= 5}" class="fas fa-star"></i>
+																</label>
+															</ul>
+														</div>
+													</div>
+													<h4>
+														<a class="product_name"
+														   th:href="@{/products/{id}(id=${product.id})}"
+														   th:text="${product.name}"></a>
+													</h4>
+													<div class="price-box">
+														<span class="new-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+													</div>
+												</div>
+												<div class="add-actions">
+													<ul class="add-actions-link">
+														<li class="add-cart active">
+															<a href="#">Thêm vào giỏ</a>
+														</li>
+														<li>
+															<a href="#" title="quick view" class="quick-view-btn" data-toggle="modal"
+															   data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a>
+														</li>
+														<li>
+															<a class="links-details" href="wishlist.html"><i
+																	class="fa fa-heart-o"></i></a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<!-- single-product-wrap end -->
+									</div>
+								</th:block>
+							</div>
+						</div>
+					</div>
+					<!-- Li's Section Area End Here -->
+				</div>
+			</div>
+		</section>
+		<!-- Li's Laptop Product Area End Here -->
+		<!-- Begin Footer Area -->
+		<div th:replace="shop/fragments/footer :: footer"></div>
+
+		<div id="notification">
+			<span id="message">Hello</span>
+		</div>
+
+	</div>
+	<!-- Body Wrapper End Here -->
+	<!-- jQuery-V1.12.4 -->
+	<script th:src="@{/js/vendor/jquery-1.12.4.min.js}"></script>
+	<!-- Bootstrap V4.1.3 Fremwork js -->
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<!-- Ajax Mail js -->
+	<script th:src="@{/js/ajax-mail.js}"></script>
+	<!-- Meanmenu js -->
+	<script th:src="@{/js/jquery.meanmenu.min.js}"></script>
+	<!-- Wow.min js -->
+	<script th:src="@{/js/wow.min.js}"></script>
+	<!-- Slick Carousel js -->
+	<script th:src="@{/js/slick.min.js}"></script>
+	<!-- Owl Carousel-2 js -->
+	<script th:src="@{/js/owl.carousel.min.js}"></script>
+	<!-- Magnific popup js -->
+	<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+	<!-- Isotope js -->
+	<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+	<!-- Imagesloaded js -->
+	<script th:src="@{/js/imagesloaded.pkgd.min.js}"></script>
+	<!-- Mixitup js -->
+	<script th:src="@{/js/jquery.mixitup.min.js}"></script>
+	<!-- Countdown -->
+	<script th:src="@{/js/jquery.countdown.min.js}"></script>
+	<!-- Counterup -->
+	<script th:src="@{/js/jquery.counterup.min.js}"></script>
+	<!-- Waypoints -->
+	<script th:src="@{/js/waypoints.min.js}"></script>
+	<!-- Barrating -->
+	<script th:src="@{/js/jquery.barrating.min.js}"></script>
+	<!-- Jquery-ui -->
+	<script th:src="@{/js/jquery-ui.min.js}"></script>
+	<!-- Venobox -->
+	<script th:src="@{/js/venobox.min.js}"></script>
+	<!-- Nice Select js -->
+	<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+	<!-- ScrollUp js -->
+	<script th:src="@{/js/scrollUp.min.js}"></script>
+	<!-- Main/Activator js -->
+	<script th:src="@{/js/main.js}"></script>
+
+	<!-- <script th:src="@{/js/jquery-3.6.0.min.js}"></script> -->
+	<script th:src="@{/js/popper.min.js}"></script>
+	<!-- <script th:src="@{/js/bootstrap.min.js"></script> -->
+	<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+	<script th:src="@{/js/script.js}"></script>
+	<script th:src="@{/js/single-product.js}"></script>
+
+</body>
+
+</html>

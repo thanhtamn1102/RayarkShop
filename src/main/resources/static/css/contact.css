@@ -1,0 +1,16 @@
+.contact-form .row {
+    margin-bottom: 0px;
+}
+
+#contact-form input {
+    height: 43px;
+    font-size: 15px;
+}
+
+#google-map {
+    height: 300px !important;
+}
+
+#google-map iframe {
+    height: 300px !important;
+}

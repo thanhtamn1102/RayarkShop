@@ -1,0 +1,732 @@
+<!DOCTYPE htms>
+<htms lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng - Rayark</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+    
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/order_management.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/order_management.js}"></script>
+</head>
+<body>
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row">
+                <div th:replace="shop/fragments/user-account-left-nav :: user-account-left-nav"></div>
+
+                <div class="col-10">
+                    <div id="box-order">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tabHeaderTatCa" data-bs-toggle="tab" data-bs-target="#tabContentTatCa" type="button"
+                                        role="tab" aria-controls="home" aria-selected="true">Tất cả
+                                    <span th:text="'(' + ${salesOrders.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderChoXacNhan" data-bs-toggle="tab" data-bs-target="#tabContentChoXacNhan" type="button"
+                                        role="tab" aria-controls="home" aria-selected="true">Chờ xác nhận
+                                    <span th:text="'(' + ${dsDonHangChoXacNhan.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderDangXuLy" data-bs-toggle="tab" data-bs-target="#tabContentDangXuLy" type="button"
+                                        role="tab" aria-controls="profile" aria-selected="false">Đang xử lý
+                                    <span th:text="'(' + ${dsDonHangDangXuLy.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderDangGiao" data-bs-toggle="tab" data-bs-target="#tabContentDangGiao" type="button"
+                                        role="tab" aria-controls="messages" aria-selected="false">Đang giao
+                                    <span th:text="'(' + ${dsDonHangDaGiao.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderDaGiao" data-bs-toggle="tab" data-bs-target="#tabContentDaGiao" type="button"
+                                        role="tab" aria-controls="messages" aria-selected="false">Đã giao
+                                    <span th:text="'(' + ${dsDonHangDaGiao.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderDaHoanThanh" data-bs-toggle="tab" data-bs-target="#tabContentDaHoanThanh" type="button"
+                                        role="tab" aria-controls="messages" aria-selected="false">Đã hoàn thành
+                                    <span th:text="'(' + ${dsDonHangDaHoanThanh.size()} + ')'"></span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tabHeaderDaHuy" data-bs-toggle="tab" data-bs-target="#tabContentDaHuy" type="button"
+                                        role="tab" aria-controls="messages" aria-selected="false">Đã hủy
+                                    <span th:text="'(' + ${dsDonHangDaHuy.size()} + ')'"></span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabContentTatCa" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="row">
+                                    <div class="col-12 boxSearchorder">
+                                        <form action="/sales-orders/search" method="get">
+                                            <button type="submit" class="btn"><i class="fas fa-search me-2 text-secondary"></i></button>
+                                            <input type="text" id="txtSearchorder" name="searchKey" placeholder="Tìm kiếm đơn hàng theo mã đơn hàng hoặc tên sản phẩm">
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${salesOrders == null || salesOrders.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${salesOrders != null}" th:each="salesOrder : ${salesOrders}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                        <div th:if="${salesOrderDetail.productVariation != null}" class="product-option py-2">
+                                                                            <th:block th:each="productOption : ${salesOrderDetail.productVariation.productVariationProductOptionValues}">
+                                                                                <button class="btn btn-sm btn-outline-success"
+                                                                                        th:text="${productOption.productOption.name + ' ' + productOption.productOptionValue.value}">
+                                                                                </button>
+                                                                            </th:block>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form class="form-order" action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-primary mx-1">Xem chi tiết đơn hàng</button>
+                                                            <button type="button" class="btn btn-outline-secondary mx-1 btnHuyDonHang"
+                                                                    data-bs-toggle="modal" data-bs-target="#huyDonHangConfirm"
+                                                                    th:data-bs-whatever="${salesOrder.id}"
+                                                                    th:if="${salesOrder.getStatus().ordinal() == 0 || salesOrder.getStatus().ordinal() == 1}">Hủy đơn hàng</button>
+                                                            <button type="button" class="btn btn-outline-primary mx-1 btnMuaLai"
+                                                                    data-bs-toggle="modal" data-bs-target="#datLaiDonHangModal"
+                                                                    th:data-bs-whatever="${salesOrder.id}"
+                                                                    th:if="${salesOrder.getStatus().ordinal() == 4 || salesOrder.getStatus().ordinal() == 5}">Mua lại</button>
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentChoXacNhan" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangChoXacNhan == null || dsDonHangChoXacNhan.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${dsDonHangChoXacNhan != null}" th:each="salesOrder : ${dsDonHangChoXacNhan}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1" data-bs-toggle="modal" data-bs-target="#huyDonHangConfirm"
+                                                                    th:data-bs-whatever="${salesOrder.id}">Xem chi tiết đơn hàng</button>
+                                                            <button type="button" class="btn btn-outline-secondary mx-1 btnHuyDonHang">Hủy đơn hàng</button>
+
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentDangXuLy" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangDangXuLy == null || dsDonHangDangXuLy.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${dsDonHangDangXuLy != null}" th:each="salesOrder : ${dsDonHangDangXuLy}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1">Xem chi tiết đơn hàng</button>
+
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentDangGiao" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangDangGiao == null || dsDonHangDangGiao.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${dsDonHangDangGiao != null}" th:each="salesOrder : ${dsDonHangDangGiao}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1">Xem chi tiết đơn hàng</button>
+
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentDaGiao" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangDaGiao == null || dsDonHangDaGiao.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${dsDonHangDaGiao != null}" th:each="salesOrder : ${dsDonHangDaGiao}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1">Xem chi tiết đơn hàng</button>
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentDaHoanThanh" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangDaHoanThanh == null || dsDonHangDaHoanThanh.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:if="${dsDonHangDaHoanThanh != null}" th:each="salesOrder : ${dsDonHangDaHoanThanh}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form class="form-order" action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1">Xem chi tiết đơn hàng</button>
+                                                            <button type="button" class="btn btn-outline-primary mx-1"
+                                                                    data-bs-toggle="modal" data-bs-target="#datLaiDonHangModal"
+                                                                    th:data-bs-whatever="${salesOrder.id}">Mua lại</button>
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="tab-pane" id="tabContentDaHuy" role="tabpanel" aria-labelledby="messages-tab">
+                                <div class="no-order row text-center align-self-center bg-white my-3 rounded"
+                                     th:if="${dsDonHangDaHuy == null || dsDonHangDaHuy.size() == 0}">
+                                    <div class="py-5">
+                                        <img style="width: 7em;" src="../img/5fafbb923393b712b96488590b8f781f.png" alt="">
+                                        <p class="text-secondary mt-2">Chưa có đơn hàng</p>
+                                    </div>
+                                </div>
+
+                                <th:block th:each="salesOrder : ${dsDonHangDaHuy}">
+                                    <div class="order my-3">
+                                        <div class="row my-3">
+                                            <div class="col-12 p-4 bg-white rounded">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getId()}"></label>&nbsp;&nbsp;<br>
+                                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getOrderDate().toString()}"></label>
+                                                    </div>
+                                                    <div class="col-6 text-end align-self-center">
+                                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                                        <label class="text-danger" th:text="${salesOrder.getStatus().toString()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+                                                    </div>
+                                                </div>
+                                                <th:block th:each="salesOrderDetail, iterStat : ${salesOrder.salesOrderDetails}" th:if="${iterStat.count} &lt;= 2">
+                                                    <div class="row py-2">
+                                                        <div class="col-12">
+                                                            <div class="product">
+                                                                <div class="row"><div class="col-1">
+                                                                    <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                                                    <div class="col-9"><label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                                    </div>
+                                                                    <div class="col-2 text-end align-self-center">
+                                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="line"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row pt-3">
+                                                    <div class="col-12 text-end">
+                                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                                        <label class="total-amount" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end">
+                                                        <form class="form-order" action="/orders" method="get">
+                                                            <input hidden type="number" name="salesOrderId" th:value="${salesOrder.id}">
+                                                            <button type="submit" class="btn btn-outline-secondary mx-1">Xem chi tiết đơn hàng</button>
+                                                            <button type="button" class="btn btn-outline-primary mx-1"
+                                                                    data-bs-toggle="modal" data-bs-target="#datLaiDonHangModal"
+                                                                    th:data-bs-whatever="${salesOrder.id}">Mua lại</button>
+                                                            <a href="/contacts">
+                                                                <button type="button" class="btn btn-danger mx-1">Liên hệ</button>
+                                                            </a>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+    </div>
+
+    <div class="modal fade" id="datLaiDonHangModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >Mua lại đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input hidden id="sales-order-id">
+                    <p>Bạn có muốn xóa tất cả sản phẩm trong giỏ hàng hiện tại?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnMuaLaiVaKhongXoaGioHang">Không</button>
+                    <button type="button" class="btn btn-primary" id="btnMuaLaiVaXoaGioHang">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="huyDonHangConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Hủy đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input hidden id="salesOrderId">
+
+                    <p>Vui lòng chọn lý do hủy đơn hàng</p>
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input radioCheckLyDoHuyDonHang" type="radio"
+                                   id="radioCheckThayDoiDiaChiGiaoHang" name="radioCheckLyDoHuyDonHang"
+                                    value="Thay đổi địa chỉ giao hàng">
+                            <label class="form-check-label" for="radioCheckThayDoiDiaChiGiaoHang">
+                                Thay đổi địa chỉ giao hàng
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input radioCheckLyDoHuyDonHang" type="radio"
+                                   id="radioCheckThayDoiHinhThucThanhToan" name="radioCheckLyDoHuyDonHang"
+                                    value="Thay đổi hình thức thanh toán">
+                            <label class="form-check-label" for="radioCheckThayDoiHinhThucThanhToan">
+                                Thay đổi hình thức thanh toán
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input radioCheckLyDoHuyDonHang" type="radio"
+                                   id="radioCheckKhongConNhuCau" name="radioCheckLyDoHuyDonHang"
+                                    value="Không còn nhu cầu">
+                            <label class="form-check-label" for="radioCheckKhongConNhuCau">
+                                Không còn nhu cầu
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input radioCheckLyDoHuyDonHang" type="radio"
+                                   id="radioCheckKhac" name="radioCheckLyDoHuyDonHang"
+                                    value="Khác">
+                            <label class="form-check-label" for="radioCheckKhac">
+                                Khác
+                            </label>
+                            <div>
+                                <textarea id="txtLyDoHuyDonHang" hidden
+                                          class="form-control" placeholder="Nhập lý do hủy đơn hàng"></textarea>
+                                <div class="form-text text-danger" id="lyDoHuyDonHangNotification"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmHuyDonHang">Hoàn thành</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification">
+        <span id="message">Hello</span>
+    </div>
+
+</body>
+</htms>

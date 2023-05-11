@@ -1,0 +1,47 @@
+.product-name {
+    font-size: 1.8rem !important;
+}
+
+.endow h5 {
+    color: red;
+    font-weight: 500;
+}
+
+.endow li {
+    list-style-type: initial;
+    margin-left: 2rem;
+}
+
+.size-options button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.single-product-area .price-box span {
+    font-size: 1.7rem !important;
+}
+
+.block-reassurance {
+    border-top: 1px solid gainsboro;
+}
+
+.detailed-product-description h3, .detailed-product-description h4 {
+    font-weight: 500;
+    text-align: justify;
+}
+
+.detailed-product-description p {
+    text-align: justify;
+}
+
+.detailed-product-description-image {
+    width: 100%;
+    text-align: center;
+}
+
+.detailed-product-description-image img {
+    width: 700px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+

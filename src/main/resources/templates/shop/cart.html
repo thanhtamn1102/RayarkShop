@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - Rayark</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+    
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/cart.js}"></script>
+</head>
+<body>
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row bg-white my-2 px-5 py-3 rounded">
+                <div class="col-6 text-center">
+                    <p class="m-0 fw-bold">Sản Phẩm</p>
+                </div>
+                <div class="col-1 text-end">
+                    <p class="m-0 fw-bold">Đơn Giá</p>
+                </div>
+                <div class="col-2 text-center">
+                    <p class="m-0 fw-bold">Số Lượng</p>
+                </div>
+                <div class="col-2">
+                    <p class="m-0 fw-bold">Số Tiền</p>
+                </div>
+                <div class="col-1 text-center">
+                    <p class="m-0 fw-bold">Thao Tác</p>
+                </div>
+            </div>
+
+            <div class="row box-product my-3">
+                <div class="col-12 py-4 bg-white rounded">
+<!--                    <div id="box-product"></div>-->
+                    <div class="text-center" th:if="${shoppingCartItems.size() == 0}">
+                        <h5 >Không có sản phẩm nào trong giỏ hàng</h5>
+                        <a class="btn btn-outline-primary" href="/products">Bắt đầu mua sắm ngay</a>
+                    </div>
+                    <th:block th:each="shoppingCartItem : ${shoppingCartItems}">
+                        <div class="product py-1">
+                            <input hidden class="shoppingCartItemId" th:value="${shoppingCartItem.id}">
+                            <div class="row px-5">
+                                <div class="col-5">
+                                    <div class="row">
+                                        <div class="col-2"><img th:src="${shoppingCartItem.product.productPhotos.get(0).thumbNailPhoto}" class="product-image"></div>
+                                        <div class="col-10">
+                                            <a class="product-name" th:href="@{/products/{id}(id=${shoppingCartItem.product.id})}">
+                                                <label class="text-dark" th:text="${shoppingCartItem.product.name}"></label>
+                                            </a>
+                                            <div th:if="${shoppingCartItem.productVariation != null}" class="product-option py-2">
+                                                <th:block th:each="productOption : ${shoppingCartItem.productVariation.productVariationProductOptionValues}">
+                                                    <button class="btn btn-sm btn-outline-warning"
+                                                            th:text="${productOption.productOption.name + ' ' + productOption.productOptionValue.value}">
+                                                    </button>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2 align-self-center text-end"><label class="product-price" th:text="${#numbers.formatDecimal(shoppingCartItem.product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                </div>
+                                <div class="col-2 align-self-center">
+                                    <div class="row count-num-product">
+                                        <div class="col-4 p-0 text-end">
+                                            <button type="button" class="btn-minus btn text-warning">
+                                                <i class="fas fa-minus-circle"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-4 px-1">
+                                            <input type="text" class="product-quantity form-control text-center" name="quantity" th:value="${shoppingCartItem.quantity}" disabled>
+                                        </div>
+                                        <div class="col-4 p-0">
+                                            <button type="button" class="btn-plus btn text-warning">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <p class="text-danger quantityNotification"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2 align-self-center">
+                                    <label class="product-line-total"
+                                           th:text="${#numbers.formatDecimal(shoppingCartItem.product.price * shoppingCartItem.quantity, 0, 'COMMA', 0, 'POINT') +' đ'}">
+                                    </label>
+                                </div>
+                                <div class="col-1 align-self-center text-center">
+                                    <button type="button" class="btn text-secondary" data-bs-toggle="modal" data-bs-target="#removeConfirmModal" th:data-bs-whatever="${shoppingCartItem.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 p-0">
+                                    <div class="line mt-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="row my-3 box-order-info">
+                <div class="col-12 px-5 py-4 bg-white rounded">
+                    <fieldset>
+                        <legend>THÔNG TIN ĐẶT HÀNG</legend>
+                        <div class="row">
+                            <div class="col-6 pe-5">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div id="boxContact">
+                                            <p th:if="${shippingAddresses == 0 || shippingAddresses.size() == 0}">Bạn chưa cập nhật địa chỉ</p>
+                                            <th:block th:each="shippingAddress, firstStat : ${shippingAddresses}">
+                                                <div class="row contact my-3">
+                                                    <div class="col-1 text-center align-self-center">
+                                                        <input type="radio" class="form-check-input radio-check-shipping-address"
+                                                               th:value="${shippingAddress.shippingAddressId}"
+                                                               th:checked="${firstStat.first ? true : false}">
+                                                    </div>
+                                                    <div class="col-11">
+                                                        <label class="display-2 font-weight-normal mb-2" th:text="${shippingAddress.nameOfConsignee}"></label><br>
+                                                        <label class="display-3"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;<span th:text="${shippingAddress.phone}"></span></label><br>
+                                                        <label class="display-3"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;
+                                                            <span th:text="${shippingAddress.address} + ', ' + ${shippingAddress.wardName} + ', ' + ${shippingAddress.districtName} + ', ' + ${shippingAddress.provinceName}"></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="line mt-2"></div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="row mt-3">
+                                    <div class="col-1"></div>
+                                    <div class="col-11">
+                                        <a class="btn btn-outline-secondary" href="/accounts/shipping-addresses">Thêm địa chỉ mới</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 ps-5">
+                                <div class="row">
+                                    <div class="col-12 py-2">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="form-select-phuong-thuc-nhan-hang">Phương thức nhận hàng</label>
+                                            <select class="form-select text-secondary" id="form-select-phuong-thuc-nhan-hang">
+                                              <option value="1">Nhận tại cửa hàng</option>
+                                              <option value="2">Gửi qua dịch vụ chuyển phát nhanh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class="display-1 py-3">Phương Thức Thanh Toán</label><br>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input radio-check-hinh-thuc-thanh-toan" id="check-thanh-toan-khi-nhan-hang" value="1" checked>
+                                            <label for="check-thanh-toan-khi-nhan-hang" class="form-check-label">Thanh toán khi nhận hàng</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input radio-check-hinh-thuc-thanh-toan" id="check-thanh-toan-online" value="2">
+                                            <label for="check-thanh-toan-online" class="form-check-label">Thẻ tín dụng / Ghi nợ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 py-4">
+                                        <textarea id="txt-ghi-chu" class="form-control" rows="4" placeholder="Ghi chú cho đơn hàng"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 px-5 py-4 bg-white rounded text-end align-self-center">
+                    <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                    <label class="total-amount me-3" id="total-payment"
+                           th:text="${#numbers.formatDecimal(subTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                    <button type="button" class="btn btn-danger px-5" id="btnDatHang">ĐẶT HÀNG</button>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+
+    </div>
+
+
+    <div class="modal fade" id="removeConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+                    <input hidden type="text" class="form-control" id="removeCartItemId" name="shoppingCartItemId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmitRemove">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="notification">
+        <span id="message">Hello</span>
+    </div>
+
+</body>
+</html>

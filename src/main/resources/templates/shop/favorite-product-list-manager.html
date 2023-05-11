@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm yêu thích</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+    
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/love_product.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/loveProduct.js}"></script>
+
+</head>
+<body>
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row">
+                <div th:replace="shop/fragments/user-account-left-nav :: user-account-left-nav"></div>
+
+                <div class="col-10 p-5 bg-white rounded">
+                    <div class="row text-center align-self-center bg-white my-3 rounded" id="no-order"
+                         th:if="${favoriteProductListItems == null || favoriteProductListItems.size() == 0}">
+                        <div class="py-5">
+                            <img style="width: 7em;" th:src="@{/img/5fafbb923393b712b96488590b8f781f.png}" alt="">
+                            <p class="text-secondary mt-2">Chưa có sản phẩm yêu thích nào</p>
+                        </div>
+                    </div>
+
+                    <div id="box-love-product" class="row">
+                        <th:block th:each="item : ${favoriteProductListItems}">
+                            <div class="col-6 my-1">
+                                <div class="love-product">
+                                    <div class="row m-0">
+                                        <div class="col-11 border-end border-secondary px-4 py-3">
+                                        <div class="row">
+                                            <div class="col-3 align-self-center">
+                                                <img th:src="${item.product.productPhotos.get(0).thumbNailPhoto}" alt="">
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <label class="product-name text-dark">
+                                                            <a class="text-dark" th:href="'/products/' + ${item.product.id}" th:text="${item.product.name}"></a>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        <button class="btn btn-outline-primary btnAddToCart" th:product-id="${item.product.id}">Thêm vào giỏ hàng</button>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <label class="product-price" th:text="${item.product.price}"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-1 align-self-center text-center p-0">
+                                            <a class="btnRemoveFromFavoriteList"
+                                               data-bs-toggle="modal" data-bs-target="#removeConfirmModal" th:data-bs-whatever="${item.product.id}">
+                                                <i class="fas fa-heart text-danger"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+
+
+        <div id="notification">
+            <span id="message">Hello</span>
+        </div>
+
+        <div class="modal fade" id="removeConfirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm trong danh sách yêu thích</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?</p>
+                        <input hidden type="text" class="form-control" id="removeFavoriteProductId" name="removeFavoriteProductId">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                        <button type="button" class="btn btn-primary" id="btnSubmitRemove">Có</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

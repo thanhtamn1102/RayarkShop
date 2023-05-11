@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <nav th:fragment="navbar-vertical" class="navbar navbar-vertical navbar-expand-lg">
+        <script>
+            let navbarStyle = window.config.config.phoenixNavbarStyle;
+            if (navbarStyle && navbarStyle !== 'transparent') {
+                document.querySelector('body').classList.add(`navbar-${navbarStyle}`);
+            }
+        </script>
+        <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+            <!-- scrollbar removed-->
+            <div class="navbar-vertical-content">
+                <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+                    <li class="nav-item">
+                        <!-- parent pages-->
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link dropdown-indicator label-1" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/products.html#home" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="home">
+                                <div class="d-flex align-items-center">
+                                    <div class="dropdown-indicator-icon">
+                                        <svg class="svg-inline--fa fa-caret-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg="">
+                                            <path fill="currentColor" d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z"></path>
+                                        </svg><!-- <span class="fas fa-caret-right"></span> Font Awesome fontawesome.com --></div><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg></span>
+                                    <span class="nav-link-text">Dashboard</span>
+                                </div>
+                            </a>
+                            <div class="parent-wrapper label-1">
+                                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="home">
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/index.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý sản phẩm</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/dashboard/project-management.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý danh mục</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/dashboard/crm.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý thương hiệu</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/social/feed.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý đơn hàng</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/social/feed.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý kho hàng</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/social/feed.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý khách hàng</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/social/feed.html" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý tài khoản</span></div>
+                                    </a><!-- more inner pages-->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link dropdown-indicator label-1" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/products.html" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                  <span class="nav-link-icon">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart">
+                                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                        <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                                      </svg>
+                                  </span>
+                                    <span class="nav-link-text">Quản lý sản phẩm</span>
+                                </div>
+                            </a><!-- more inner pages-->
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý danh mục</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý thương hiệu</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý nhà cung cấp</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý kho hàng</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý đơn hàng</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý khách hàng</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-text">Quản lý tài khoản</span></div>
+                        </a><!-- more inner pages-->
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+        </div>
+        <div class="navbar-vertical-footer">
+            <button class="btn navbar-vertical-toggle border-0 fw-semi-bold w-100 white-space-nowrap d-flex align-items-center">
+                <span class="uil uil-left-arrow-to-left fs-0"></span>
+                <span class="uil uil-arrow-from-right fs-0"></span>
+                <span class="navbar-vertical-footer-text ms-2">Ẩn thanh menu</span>
+            </button>
+        </div>
+    </nav>
+
+</body>
+</html>

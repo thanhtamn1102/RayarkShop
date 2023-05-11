@@ -1,0 +1,357 @@
+<!DOCTYPE htms>
+<htms lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng - Rayark</title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/order.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/order.js}"></script>
+</head>
+<body>
+    <input hidden id="sales-order-id" th:value="${salesOrder.id}">
+
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row">
+                <div th:replace="shop/fragments/user-account-left-nav :: user-account-left-nav"></div>
+
+                <div class="col-10 bg-white rounded py-2">
+                    <div class="order">
+                        <div class="row my-3">
+                            <div class="col-12 p-4 bg-white rounded">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="font-weight-light"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;Mã đơn hàng</label>&nbsp;&nbsp;
+                                        <label class="text-danger" id="lblOrderId" th:text="${salesOrder.id}"></label><br>
+                                        <label class="font-weight-light"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Ngày đặt hàng</label>&nbsp;&nbsp;
+                                        <label class="text-danger" id="lblOrderTime" th:text="${salesOrder.orderDate}"></label>
+                                    </div>
+                                    <div class="col-6 text-end align-self-center">
+                                        <label class="font-weight-light"><i class="fas fa-truck"></i>&nbsp;&nbsp;Trạng thái</label>&nbsp;&nbsp;
+                                        <label class="text-danger" id="lblOrderStatus" th:text="${salesOrder.status.toString()}"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+
+                                <div class="row my-3 order-info">
+                                    <div class="col-6 ps-5 pe-2 align-self-center">
+                                        <h5>Thông Tin Đặt Hàng</h5>
+                                        <div class="row address my-2">
+                                            <div class="col-12">
+                                                <label class="display-2 font-weight-normal mb-2" id="lblContactName" th:text="${salesOrder.shippingAddress.nameOfConsignee}"></label><br>
+                                                <label class="display-3">
+                                                    <i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;
+                                                    <span id="lblContactPhoneNumber" th:text="${salesOrder.shippingAddress.phone}"></span>
+                                                </label><br>
+                                                <label class="display-3 mt-1">
+                                                    <i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;
+                                                    <span id="lblContactAddress" th:text="${salesOrder.shippingAddress.address} + ', ' + ${salesOrder.shippingAddress.wardName} + ', ' + ${salesOrder.shippingAddress.districtName} + ', ' + ${salesOrder.shippingAddress.provinceName}"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 px-2 pe-5 align-self-center">
+                                        <label class="display-3">Phương thức nhận hàng</label>&nbsp;&nbsp;<label>Nhận tại cửa hàng</label><br>
+                                        <label class="display-3">Phương thức thanh toán</label>&nbsp;&nbsp;<label>Thanh toán khi nhận hàng</label><br>
+                                        <h6 class="mt-2">GHI CHÚ</h6>
+                                        <textarea class="form-control-plaintext" id="txtOrderNote" rows="3" th:text="${salesOrder.comment}" placeholder="Không có ghi chú cho đơn hàng này" disabled></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="line mt-1 mb-2" style="border-bottom: 1px solid dodgerblue;"></div>
+
+                                <div id="box-order-product">
+                                    <th:block th:each="salesOrderDetail : ${salesOrder.salesOrderDetails}">
+                                        <div class="row py-2"><div class="col-12">
+                                            <div class="product">
+                                                <div class="row">
+                                                    <div class="col-1">
+                                                        <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image">
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <a th:href="${'/products/' + salesOrderDetail.product.id}">
+                                                            <label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                                        </a>
+                                                        <p class="num-of-product" th:text="'Số lượng x' + ${salesOrderDetail.quantity}"></p>
+                                                        <div th:if="${salesOrderDetail.productVariation != null}" class="product-option py-2">
+                                                            <th:block th:each="productOption : ${salesOrderDetail.productVariation.productVariationProductOptionValues}">
+                                                                <button class="btn btn-sm btn-outline-warning"
+                                                                        th:text="${productOption.productOption.name + ' ' + productOption.productOptionValue.value}">
+                                                                </button>
+                                                            </th:block>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2 text-end align-self-center">
+                                                        <label class="product-price" th:text="${#numbers.formatDecimal(salesOrderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="line"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </th:block>
+                                </div>
+
+                                <div class="row pt-3">
+                                    <div class="col-12 text-end">
+                                        <label class="font-weight-light">Tổng thanh toán:</label>&nbsp;&nbsp;
+                                        <label class="total-amount" id="order-total-payment" th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-warning mx-1"
+                                                data-bs-toggle="modal" data-bs-target="#danhGiaSanPhamModal"
+                                                th:if="${(salesOrder.getStatus().ordinal() == 4 && productReviews == null)
+                                                            || (salesOrder.getStatus().ordinal() == 4 && productReviews.size() == 0)}">Đánh giá</button>
+                                        <button class="btn btn-warning mx-1"
+                                                data-bs-toggle="modal" data-bs-target="#xemDanhGiaSanPhamModel"
+                                                th:if="${productReviews != null && productReviews.size() > 0}">Xem đánh giá</button>
+                                        <button class="btn btn-warning mx-1"
+                                                data-bs-toggle="modal" data-bs-target="#chiTietHuyDonModal"
+                                                th:if="${salesOrder.getStatus().ordinal() == 5}">Chi tiết hủy đơn</button>
+                                        <a href="/contacts">
+                                            <button type="button" class="btn btn-danger" id="btnLienHe">Liên hệ</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+    </div>
+
+
+    <div id="notification">
+        <span id="message"></span>
+    </div>
+
+    <div    th:if="${productReviews != null && productReviews.size() > 0}"
+            class="modal fade" id="xemDanhGiaSanPhamModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đánh giá sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <th:block th:each="productReview : ${productReviews}">
+                        <div class="row py-2">
+                            <div class="col-12">
+                                <div class="product">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img th:src="${productReview.product.productPhotos.get(0).thumbNailPhoto}" class="product-image">
+                                        </div>
+                                        <div class="col-10">
+                                            <label class="product-name" th:text="${productReview.product.name}"></label>
+                                        </div>
+                                        <div class="col-1">
+                                            <button class="btn btn-outline-warning"
+                                                    data-bs-toggle="modal" data-bs-target="#danhGiaSanPhamModal"
+                                                    data-bs-dismiss="modal">Chỉnh sửa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <form class="form-danh-gia-san-pham">
+                                <div class="col-12">
+                                    <div class="form-ratting">
+                                        <label class="text-warning fs-4 ratting ratting1" value="1">
+                                            <i class="fas fa-star"></i>
+                                        </label>
+
+                                        <label class="text-warning fs-4 ratting ratting2" value="2">
+                                            <i th:if="${productReview.rating < 2}" class="far fa-star"></i>
+                                            <i th:if="${productReview.rating >= 2}" class="fas fa-star"></i>
+                                        </label>
+
+                                        <label class="text-warning fs-4 ratting ratting3" value="3">
+                                            <i th:if="${productReview.rating < 3}" class="far fa-star"></i>
+                                            <i th:if="${productReview.rating >= 3}" class="fas fa-star"></i>
+                                        </label>
+
+                                        <label class="text-warning fs-4 ratting ratting4" value="4">
+                                            <i th:if="${productReview.rating < 4}" class="far fa-star"></i>
+                                            <i th:if="${productReview.rating >= 4}" class="fas fa-star"></i>
+                                        </label>
+
+                                        <label class="text-warning fs-4 ratting ratting5" value="5">
+                                            <i th:if="${productReview.rating < 5}" class="far fa-star"></i>
+                                            <i th:if="${productReview.rating >= 5}" class="fas fa-star"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12" th:if="${productReview.comment.isEmpty() == false}">
+                                    <label>Đánh giá</label>
+                                    <textarea class="form-control txtComment" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm này với mọi người" rows="4"
+                                                th:text="${productReview.comment}" disabled></textarea>
+                                </div>
+
+                                <div class="col-12 preview-image-container"
+                                    th:if="${productReview.productReviewImages != null && productReview.productReviewImages.size() > 0}">
+                                    <th:block th:each="productReviewImage : ${productReview.getProductReviewImages()}">
+                                        <div class="image-container">
+                                            <img th:src="${productReviewImage.path}"
+                                                 class="img-thumbnail rounded">
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </form>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div    th:if="${salesOrder.getStatus().ordinal() == 4}"
+            class="modal fade" id="danhGiaSanPhamModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đánh giá sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <th:block th:each="salesOrderDetail : ${salesOrder.getSalesOrderDetails()}">
+                        <div class="row py-2">
+                            <div class="col-12">
+                                <div class="product">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <img th:src="${salesOrderDetail.product.productPhotos.get(0).thumbNailPhoto}" class="product-image">
+                                    </div>
+                                    <div class="col-11">
+                                        <label class="product-name" th:text="${salesOrderDetail.product.name}"></label>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                <div class="col-12">
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <form class="form-danh-gia-san-pham" th:product-id="${salesOrderDetail.product.id}">
+                                <div class="col-12">
+                                    <div class="form-ratting">
+                                        <input hidden type="radio" th:id="${'star1' + salesOrderDetail.product.id}" name="rating" class="ratting-check ratting-check1" value="1">
+                                        <label th:for="${'star1' + salesOrderDetail.product.id}" class="text-warning fs-4 ratting ratting1" value="1"><i class="fas fa-star"></i></label>
+
+                                        <input hidden type="radio" th:id="${'star2' + salesOrderDetail.product.id}" name="rating" class="ratting-check ratting-check2" value="2" />
+                                        <label th:for="${'star2' + salesOrderDetail.product.id}" class="text-warning fs-4 ratting ratting2" value="2"><i class="far fa-star"></i></label>
+
+                                        <input hidden type="radio" th:id="${'star3' + salesOrderDetail.product.id}" name="rating" class="ratting-check ratting-check3" value="3" />
+                                        <label th:for="${'star3' + salesOrderDetail.product.id}" class="text-warning fs-4 ratting ratting3" value="3"><i class="far fa-star"></i></label>
+
+                                        <input hidden type="radio" th:id="${'star4' + salesOrderDetail.product.id}" name="rating" class="ratting-check ratting-check4" value="4" />
+                                        <label th:for="${'star4' + salesOrderDetail.product.id}" class="text-warning fs-4 ratting ratting4" value="4"><i class="far fa-star"></i></label>
+
+                                        <input hidden type="radio" th:id="${'star5' + salesOrderDetail.product.id}" name="rating" class="ratting-check ratting-check5" value="5" />
+                                        <label th:for="${'star5' + salesOrderDetail.product.id}" class="text-warning fs-4 ratting ratting5" value="5"><i class="far fa-star"></i></label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label>Đánh giá</label>
+                                    <textarea class="form-control txtComment" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm này với mọi người" rows="4"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <input hidden th:id="${'file-input' + salesOrderDetail.product.id}" class="input-files-upload" type="file" name="file" multiple
+                                            th:product-id="${salesOrderDetail.product.id}">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <button class="btn btn-primary btn-upload-image" type="button" th:value="${salesOrderDetail.product.id}">Tải lên hình ảnh</button>
+                                        </div>
+                                        <div class="col-7 text-right align-self-center text-end">
+                                            <label class="text-danger m-0 uploadNotification"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 preview-image-container"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmitDanhGia">Đánh giá</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div    th:if="${salesOrder.getStatus().ordinal() == 5}"
+            class="modal fade" id="chiTietHuyDonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Chi tiết hủy đơn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-danger">Đã hủy đơn hàng</h3>
+                    <h5>vào <span th:text="${salesOrder.getOrderCancelDetail().timestamp.toString()}"></span></h5>
+
+                    <div class="table-responsive mt-3">
+                        <table class="table">
+                            <tbody>
+                            <tr class="">
+                                <td scope="row">Yêu cầu bởi</td>
+                                <td class="text-right">Người mua</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Yêu cầu vào</td>
+                                <td class="text-right" th:text="${salesOrder.getOrderCancelDetail().timestamp.toString()}"></td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Lý do</td>
+                                <td class="text-right" th:text="${salesOrder.getOrderCancelDetail().reason}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</htms>

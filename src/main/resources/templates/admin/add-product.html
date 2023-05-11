@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html -->
+<html lang="en-US" dir="ltr" class="navbar-combo chrome windows fontawesome-i2svg-active fontawesome-i2svg-complete"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/admin/layout/admin-page-layout :: admin-page-layout(~{::#main_content})}">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Rayark Shop</title>
+
+  <style type="text/css" rel="stylesheet" th:href="@{/admin/css/add-product.css}"></style>
+  <link rel="apple-touch-icon" sizes="180x180"
+        href="https://prium.github.io/phoenix/v1.11.0/assets/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32"
+        href="https://prium.github.io/phoenix/v1.11.0/assets/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16"
+        href="https://prium.github.io/phoenix/v1.11.0/assets/img/favicons/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/x-icon"
+        href="https://prium.github.io/phoenix/v1.11.0/assets/img/favicons/favicon.ico">
+  <link rel="manifest" href="https://prium.github.io/phoenix/v1.11.0/assets/img/favicons/manifest.json">
+  <meta name="msapplication-TileImage" content="../../../assets/img/favicons/mstile-150x150.png">
+  <meta name="theme-color" content="#ffffff">
+  <script th:src="@{/admin/js/imagesloaded.pkgd.min.js}"></script>
+  <script th:src="@{/admin/js/simplebar.min.js}"></script>
+  <script th:src="@{/admin/js/config.js}"></script>
+
+  <link th:href="@{/admin/css/dropzone.min.css}" rel="stylesheet">
+  <link th:href="@{/admin/css/choices.min.css}" rel="stylesheet">
+  <link th:href="@{/admin/css/flatpickr.min.css}" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link th:href="@{/admin/css/css2}" rel="stylesheet">
+  <link th:href="@{/admin/css/simplebar.min.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/admin/css/line.css}">
+  <link th:href="@{/admin/css/theme-rtl.min.css}" type="text/css" rel="stylesheet" id="style-rtl" disabled="true">
+  <link th:href="@{/admin/css/theme.min.css}" type="text/css" rel="stylesheet" id="style-default">
+  <link th:href="@{/admin/css/user-rtl.min.css}" type="text/css" rel="stylesheet" id="user-style-rtl"
+        disabled="true">
+  <link th:href="@{/admin/css/user.min.css}" type="text/css" rel="stylesheet" id="user-style-default">
+  <script th:src="@{/admin/js/add-product.js}"></script>
+  <link rel="stylesheet" type="text/css" id="mce-u0" th:href="@{/admin/css/skin.min.css}">
+</head>
+
+<body>
+
+<div id="main_content" class="content">
+<!--  <nav class="mb-2" aria-label="breadcrumb">-->
+<!--    <ol class="breadcrumb mb-0">-->
+<!--      <li class="breadcrumb-item"><a-->
+<!--              href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">Page-->
+<!--        1</a></li>-->
+<!--      <li class="breadcrumb-item"><a-->
+<!--              href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">Page-->
+<!--        2</a></li>-->
+<!--      <li class="breadcrumb-item active">Default</li>-->
+<!--    </ol>-->
+<!--  </nav>-->
+  <form class="mb-9">
+    <div class="row g-3 flex-between-end mb-5">
+      <div class="col-auto">
+        <h2 class="mb-2">Thêm sản phẩm mới</h2>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-phoenix-secondary me-2 mb-2 mb-sm-0"
+                type="button">Hủy</button>
+        <button class="btn btn-primary mb-2 mb-sm-0"
+                type="submit">Lưu sản phẩm</button></div>
+    </div>
+    <h4 class="mb-3">Tên sản phẩm</h4>
+    <div class="row g-5">
+      <div class="col-12 col-xl-8"><input class="form-control mb-5" type="text"
+                                          placeholder="Nhập tên sản phẩm">
+        <div class="mb-6">
+          <h4 class="mb-3">Mô tả</h4>
+          <textarea class="tinymce form-control" style="height: 300px; padding-bottom: -250px; margin-bottom: -250px;" name="content" placeholder="Nhập mô tả cho sản phẩm">
+          </textarea>
+          <div role="application" class="tox tox-tinymce" aria-disabled="false"
+               style="visibility: hidden; height: 15rem;">
+            <div class="tox-editor-container">
+              <div data-alloy-vertical-dir="toptobottom" class="tox-editor-header">
+                <div role="group" class="tox-toolbar-overlord" aria-disabled="false">
+                  <div role="group" class="tox-toolbar__primary">
+                    <div title="history" role="toolbar" data-alloy-tabstop="true"
+                         tabindex="-1" class="tox-toolbar__group"><button
+                            aria-label="Undo" title="Undo" type="button" tabindex="-1"
+                            class="tox-tbtn tox-tbtn--disabled"
+                            aria-disabled="true"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M6.4 8H12c3.7 0 6.2 2 6.8 5.1.6 2.7-.4 5.6-2.3 6.8a1 1 0 0 1-1-1.8c1.1-.6 1.8-2.7 1.4-4.6-.5-2.1-2.1-3.5-4.9-3.5H6.4l3.3 3.3a1 1 0 1 1-1.4 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 1.4L6.4 8Z"
+                                                                            fill-rule="nonzero"></path>
+                                                                </svg></span></button><button aria-label="Redo"
+                                                                                              title="Redo" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn tox-tbtn--disabled"
+                                                                                              aria-disabled="true"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M17.6 10H12c-2.8 0-4.4 1.4-4.9 3.5-.4 2 .3 4 1.4 4.6a1 1 0 1 1-1 1.8c-2-1.2-2.9-4.1-2.3-6.8.6-3 3-5.1 6.8-5.1h5.6l-3.3-3.3a1 1 0 1 1 1.4-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3Z"
+                                                                            fill-rule="nonzero"></path>
+                                                                </svg></span></button></div>
+                    <div title="formatting" role="toolbar" data-alloy-tabstop="true"
+                         tabindex="-1" class="tox-toolbar__group"><button
+                            aria-label="Bold" title="Bold" type="button" tabindex="-1"
+                            class="tox-tbtn" aria-disabled="false"
+                            aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M7.8 19c-.3 0-.5 0-.6-.2l-.2-.5V5.7c0-.2 0-.4.2-.5l.6-.2h5c1.5 0 2.7.3 3.5 1 .7.6 1.1 1.4 1.1 2.5a3 3 0 0 1-.6 1.9c-.4.6-1 1-1.6 1.2.4.1.9.3 1.3.6s.8.7 1 1.2c.4.4.5 1 .5 1.6 0 1.3-.4 2.3-1.3 3-.8.7-2.1 1-3.8 1H7.8Zm5-8.3c.6 0 1.2-.1 1.6-.5.4-.3.6-.7.6-1.3 0-1.1-.8-1.7-2.3-1.7H9.3v3.5h3.4Zm.5 6c.7 0 1.3-.1 1.7-.4.4-.4.6-.9.6-1.5s-.2-1-.7-1.4c-.4-.3-1-.4-2-.4H9.4v3.8h4Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Italic"
+                                                                                              title="Italic" type="button" tabindex="-1" class="tox-tbtn"
+                                                                                              aria-disabled="false" aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="m16.7 4.7-.1.9h-.3c-.6 0-1 0-1.4.3-.3.3-.4.6-.5 1.1l-2.1 9.8v.6c0 .5.4.8 1.4.8h.2l-.2.8H8l.2-.8h.2c1.1 0 1.8-.5 2-1.5l2-9.8.1-.5c0-.6-.4-.8-1.4-.8h-.3l.2-.9h5.8Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Underline"
+                                                                                              title="Underline" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn" aria-disabled="false"
+                                                                                              aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M16 5c.6 0 1 .4 1 1v5.5a4 4 0 0 1-.4 1.8l-1 1.4a5.3 5.3 0 0 1-5.5 1 5 5 0 0 1-1.6-1c-.5-.4-.8-.9-1.1-1.4a4 4 0 0 1-.4-1.8V6c0-.6.4-1 1-1s1 .4 1 1v5.5c0 .3 0 .6.2 1l.6.7a3.3 3.3 0 0 0 2.2.8 3.4 3.4 0 0 0 2.2-.8c.3-.2.4-.5.6-.8l.2-.9V6c0-.6.4-1 1-1ZM8 17h8c.6 0 1 .4 1 1s-.4 1-1 1H8a1 1 0 0 1 0-2Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Strikethrough"
+                                                                                              title="Strikethrough" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn" aria-disabled="false"
+                                                                                              aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <g fill-rule="evenodd">
+                                                                        <path
+                                                                                d="M15.6 8.5c-.5-.7-1-1.1-1.3-1.3-.6-.4-1.3-.6-2-.6-2.7 0-2.8 1.7-2.8 2.1 0 1.6 1.8 2 3.2 2.3 4.4.9 4.6 2.8 4.6 3.9 0 1.4-.7 4.1-5 4.1A6.2 6.2 0 0 1 7 16.4l1.5-1.1c.4.6 1.6 2 3.7 2 1.6 0 2.5-.4 3-1.2.4-.8.3-2-.8-2.6-.7-.4-1.6-.7-2.9-1-1-.2-3.9-.8-3.9-3.6C7.6 6 10.3 5 12.4 5c2.9 0 4.2 1.6 4.7 2.4l-1.5 1.1Z">
+                                                                        </path>
+                                                                        <path
+                                                                                d="M5 11h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+                                                                                fill-rule="nonzero"></path>
+                                                                    </g>
+                                                                </svg></span></button></div>
+                    <div title="alignment" role="toolbar" data-alloy-tabstop="true"
+                         tabindex="-1" class="tox-toolbar__group"><button
+                            aria-label="Align left" title="Align left" type="button"
+                            tabindex="-1" class="tox-tbtn" aria-disabled="false"
+                            aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M5 5h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm0 4h8c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm0 8h8c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Zm0-4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Align center"
+                                                                                              title="Align center" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn" aria-disabled="false"
+                                                                                              aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M5 5h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm3 4h8c.6 0 1 .4 1 1s-.4 1-1 1H8a1 1 0 1 1 0-2Zm0 8h8c.6 0 1 .4 1 1s-.4 1-1 1H8a1 1 0 0 1 0-2Zm-3-4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Align right"
+                                                                                              title="Align right" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn" aria-disabled="false"
+                                                                                              aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M5 5h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm6 4h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm0 8h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm-6-4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Justify"
+                                                                                              title="Justify" type="button" tabindex="-1" class="tox-tbtn"
+                                                                                              aria-disabled="false" aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M5 5h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 1 1 0-2Zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 0 1 0-2Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button></div>
+                    <div title="list" role="toolbar" data-alloy-tabstop="true"
+                         tabindex="-1" class="tox-toolbar__group"><button
+                            aria-label="Numbered list" title="Numbered list"
+                            type="button" tabindex="-1" class="tox-tbtn"
+                            aria-disabled="false" aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M10 17h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm0-6h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm0-6h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 1 1 0-2ZM6 4v3.5c0 .3-.2.5-.5.5a.5.5 0 0 1-.5-.5V5h-.5a.5.5 0 0 1 0-1H6Zm-1 8.8.2.2h1.3c.3 0 .5.2.5.5s-.2.5-.5.5H4.9a1 1 0 0 1-.9-1V13c0-.4.3-.8.6-1l1.2-.4.2-.3a.2.2 0 0 0-.2-.2H4.5a.5.5 0 0 1-.5-.5c0-.3.2-.5.5-.5h1.6c.5 0 .9.4.9 1v.1c0 .4-.3.8-.6 1l-1.2.4-.2.3ZM7 17v2c0 .6-.4 1-1 1H4.5a.5.5 0 0 1 0-1h1.2c.2 0 .3-.1.3-.3 0-.2-.1-.3-.3-.3H4.4a.4.4 0 1 1 0-.8h1.3c.2 0 .3-.1.3-.3 0-.2-.1-.3-.3-.3H4.5a.5.5 0 1 1 0-1H6c.6 0 1 .4 1 1Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button><button aria-label="Bullet list"
+                                                                                              title="Bullet list" type="button" tabindex="-1"
+                                                                                              class="tox-tbtn" aria-disabled="false"
+                                                                                              aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M11 5h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm0 6h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2Zm0 6h8c.6 0 1 .4 1 1s-.4 1-1 1h-8a1 1 0 0 1 0-2ZM4.5 6c0-.4.1-.8.4-1 .3-.4.7-.5 1.1-.5.4 0 .8.1 1 .4.4.3.5.7.5 1.1 0 .4-.1.8-.4 1-.3.4-.7.5-1.1.5-.4 0-.8-.1-1-.4-.4-.3-.5-.7-.5-1.1Zm0 6c0-.4.1-.8.4-1 .3-.4.7-.5 1.1-.5.4 0 .8.1 1 .4.4.3.5.7.5 1.1 0 .4-.1.8-.4 1-.3.4-.7.5-1.1.5-.4 0-.8-.1-1-.4-.4-.3-.5-.7-.5-1.1Zm0 6c0-.4.1-.8.4-1 .3-.4.7-.5 1.1-.5.4 0 .8.1 1 .4.4.3.5.7.5 1.1 0 .4-.1.8-.4 1-.3.4-.7.5-1.1.5-.4 0-.8-.1-1-.4-.4-.3-.5-.7-.5-1.1Z"
+                                                                            fill-rule="evenodd"></path>
+                                                                </svg></span></button></div>
+                    <div title="link" role="toolbar" data-alloy-tabstop="true"
+                         tabindex="-1" class="tox-toolbar__group"><button
+                            aria-label="Insert/edit link" title="Insert/edit link"
+                            type="button" tabindex="-1" class="tox-tbtn"
+                            aria-disabled="false" aria-pressed="false"><span
+                            class="tox-icon tox-tbtn__icon-wrap"><svg width="24"
+                                                                      height="24" focusable="false">
+                                                                    <path
+                                                                            d="M6.2 12.3a1 1 0 0 1 1.4 1.4l-2 2a2 2 0 1 0 2.6 2.8l4.8-4.8a1 1 0 0 0 0-1.4 1 1 0 1 1 1.4-1.3 2.9 2.9 0 0 1 0 4L9.6 20a3.9 3.9 0 0 1-5.5-5.5l2-2Zm11.6-.6a1 1 0 0 1-1.4-1.4l2-2a2 2 0 1 0-2.6-2.8L11 10.3a1 1 0 0 0 0 1.4A1 1 0 1 1 9.6 13a2.9 2.9 0 0 1 0-4L14.4 4a3.9 3.9 0 0 1 5.5 5.5l-2 2Z"
+                                                                            fill-rule="nonzero"></path>
+                                                                </svg></span></button></div>
+                  </div>
+                </div>
+                <div class="tox-anchorbar"></div>
+              </div>
+              <div class="tox-sidebar-wrap">
+                <div class="tox-edit-area"><iframe id="mce_0_ifr" frameborder="0"
+                                                   allowtransparency="true" title="Rich Text Area"
+                                                   class="tox-edit-area__iframe"
+                                                   th:src="@{/admin/js/saved_resource.html}"></iframe></div>
+                <div role="complementary" class="tox-sidebar">
+                  <div data-alloy-tabstop="true" tabindex="-1"
+                       class="tox-sidebar__slider tox-sidebar--sliding-closed"
+                       style="width: 0px;">
+                    <div class="tox-sidebar__pane-container"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div aria-hidden="true" class="tox-throbber" style="display: none;"></div>
+          </div>
+        </div>
+        <h4 class="mb-3">Hình ảnh</h4>
+        <div class="dropzone dropzone-multiple p-0 mb-5 dz-clickable" id="my-awesome-dropzone"
+             data-dropzone="data-dropzone">
+
+          <div class="dz-preview d-flex flex-wrap"></div>
+          <div class="dz-message text-600" data-dz-message="data-dz-message">
+            <button class="btn btn-link p-0" type="button">Chọn hình ảnh từ thiết bị</button><br>
+            <img class="mt-3 me-2" th:src="@{/admin/img/image-icon.png}" width="40" alt="">
+            <img class="mt-3 me-2" th:src="@{/admin/img/image-icon.png}" width="40" alt="">
+            <img class="mt-3 me-2" th:src="@{/admin/img/image-icon.png}" width="40" alt="">
+          </div>
+        </div>
+        <h4 class="mb-3">Inventory</h4>
+        <div class="row g-0 border-top border-bottom border-300">
+          <div class="col-sm-4">
+            <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
+                 role="tablist" aria-orientation="vertical">
+
+
+              <a
+                    class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active"
+                    id="pricingTab" data-bs-toggle="tab" data-bs-target="#pricingTabContent"
+                    role="tab" aria-controls="pricingTabContent" aria-selected="true"> <svg
+                    xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-tag me-sm-2 fs-4 nav-icons">
+              <path
+                      d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z">
+              </path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg><span class="d-none d-sm-inline">Giá sản phẩm</span></a>
+
+
+              <a
+                    class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                    id="restockTab" data-bs-toggle="tab" data-bs-target="#restockTabContent"
+                    role="tab" aria-controls="restockTabContent" aria-selected="false"
+                    tabindex="-1"> <svg xmlns="http://www.w3.org/2000/svg" width="16px"
+                                        height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-package me-sm-2 fs-4 nav-icons">
+              <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+              <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+              </path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg><span class="d-none d-sm-inline">Kho hàng</span></a>
+
+
+              <a
+                    class="nav-link text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                    id="advancedTab" data-bs-toggle="tab" data-bs-target="#advancedTabContent"
+                    role="tab" aria-controls="advancedTabContent" aria-selected="false"
+                    tabindex="-1"> <svg xmlns="http://www.w3.org/2000/svg" width="16px"
+                                        height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-lock me-sm-2 fs-4 nav-icons">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg><span class="d-none d-sm-inline">Khác</span></a></div>
+          </div>
+          <div class="col-sm-8">
+            <div class="tab-content py-3 ps-sm-4 h-100">
+              <div class="tab-pane fade show active" id="pricingTabContent" role="tabpanel"
+                   aria-labelledby="#pricingTab">
+                <h4 class="mb-3 d-sm-none">Pricing</h4>
+                <div class="row g-3">
+                  <div class="col-12 col-lg-6">
+                    <h5 class="mb-2 text-1000">Giá nhập</h5><input
+                          class="form-control" type="text" placeholder="VND">
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <h5 class="mb-2 text-1000">Giá bán</h5><input
+                          class="form-control" type="text" placeholder="VND">
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade h-100" id="restockTabContent" role="tabpanel"
+                   aria-labelledby="restockTab">
+                <div class="d-flex flex-column h-100">
+                  <h5 class="mb-3 text-1000">Số lượng trong kho</h5>
+                  <div class="row g-3 flex-1 mb-4">
+                    <div class="col-sm-7"><input class="form-control" type="number"
+                                                 placeholder="Số lượng"></div>
+                    <div class="col-sm">
+<!--                      <button class="btn btn-primary"-->
+<!--                                                type="button"><svg-->
+<!--                            class="svg-inline&#45;&#45;fa fa-check me-1 fs&#45;&#45;2"-->
+<!--                            aria-hidden="true" focusable="false" data-prefix="fas"-->
+<!--                            data-icon="check" role="img"-->
+<!--                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"-->
+<!--                            data-fa-i2svg="">-->
+<!--                      <path fill="currentColor"-->
+<!--                            d="M438.6 105.4C451.1 117.9 451.1 138.1 438.6 150.6L182.6 406.6C170.1 419.1 149.9 419.1 137.4 406.6L9.372 278.6C-3.124 266.1-3.124 245.9 9.372 233.4C21.87 220.9 42.13 220.9 54.63 233.4L159.1 338.7L393.4 105.4C405.9 92.88 426.1 92.88 438.6 105.4H438.6z">-->
+<!--                      </path>-->
+<!--                    </svg>&lt;!&ndash; <span class="fa-solid fa-check me-1 fs&#45;&#45;2"></span> Font Awesome fontawesome.com &ndash;&gt;-->
+<!--                        Lưu</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="advancedTabContent" role="tabpanel"
+                   aria-labelledby="advancedTab">
+                <h5 class="mb-3 text-1000">Advanced</h5>
+                <div class="row g-3">
+                  <div class="col-12 col-lg-6">
+                    <h5 class="mb-2 text-1000">Product ID Type</h5><select
+                          class="form-select" aria-label="form-select-lg example">
+                    <option selected="selected">ISBN</option>
+                    <option value="1">UPC</option>
+                    <option value="2">EAN</option>
+                    <option value="3">JAN</option>
+                  </select>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <h5 class="mb-2 text-1000">Product ID</h5><input
+                          class="form-control" type="text" placeholder="ISBN Number">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-4">
+        <div class="row g-2">
+          <div class="col-12 col-xl-12">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h4 class="card-title mb-4">Thông tin khác</h4>
+                <div class="row g-3">
+                  <div class="col-12 col-sm-6 col-xl-12">
+                    <div class="mb-4">
+                      <div class="d-flex flex-wrap mb-2">
+                        <h5 class="mb-0 text-1000 me-2">Danh mục</h5>
+                        <a class="fw-bold fs--1"
+                           href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">
+                          Thêm danh mục mới
+                        </a>
+                      </div>
+                      <select class="form-select mb-3" aria-label="category">
+                          <th:block th:each="productCategory : ${productCategories}">
+                              <option value="men-cloth" th:text="${productCategory.name}"></option>
+                          </th:block>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-xl-12">
+                    <div class="mb-4">
+                      <div class="d-flex flex-wrap mb-2">
+                        <h5 class="mb-0 text-1000 me-2">Thương hiệu</h5>
+                        <a class="fw-bold fs--1"
+                           href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">
+                          Thêm thương hiệu mới
+                        </a>
+                      </div>
+                      <select class="form-select mb-3" aria-label="category">
+                          <th:block th:each="brand : ${brands}">
+                            <option value="men-cloth" th:text="${brand.name}"></option>
+                          </th:block>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-xl-12">
+                    <div class="mb-4">
+                      <div class="d-flex flex-wrap mb-2">
+                        <h5 class="mb-0 text-1000 me-2">Trạng thái</h5>
+                      </div><select class="form-select mb-3" aria-label="category">
+                      <option value="men-cloth">Đăng bán</option>
+                      <option value="women-cloth">Đã ẩn</option>
+                      <option value="kid-cloth">Hết hàng</option>
+                    </select>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-12">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title mb-4">Biến thể</h4>
+                <div class="row g-3">
+                  <div class="col-12 col-sm-6 col-xl-12">
+                    <div
+                            class="border-bottom border-dashed border-sm-0 border-bottom-xl pb-4">
+                      <div class="d-flex flex-wrap mb-2">
+                        <h5 class="text-1000 me-2">Option 1</h5><a
+                              class="fw-bold fs--1"
+                              href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">Remove</a>
+                      </div><select class="form-select mb-3">
+                      <option value="size">Size</option>
+                      <option value="color">Color</option>
+                      <option value="weight">Weight</option>
+                      <option value="smell">Smell</option>
+                    </select>
+                      <div class="product-variant-select-menu">
+                        <div class="choices" data-type="select-multiple"
+                             role="combobox" aria-autocomplete="list"
+                             aria-haspopup="true" aria-expanded="false">
+                          <div class="choices__inner"><select
+                                  class="form-select mb-3 choices__input"
+                                  data-choices="data-choices" multiple="multiple"
+                                  data-options="{&quot;removeItemButton&quot;:true,&quot;placeholder&quot;:true}"
+                                  hidden="" tabindex="-1"
+                                  data-choice="active"></select>
+                            <div class="choices__list choices__list--multiple">
+                            </div><input type="text"
+                                         class="choices__input choices__input--cloned"
+                                         autocomplete="off" autocapitalize="off"
+                                         spellcheck="false" role="textbox"
+                                         aria-autocomplete="list" aria-label="null">
+                          </div>
+                          <div class="choices__list choices__list--dropdown"
+                               aria-expanded="false">
+                            <div class="choices__list"
+                                 aria-multiselectable="true" role="listbox">
+                              <div id="choices--fgkd-item-choice-1"
+                                   class="choices__item choices__item--choice choices__item--selectable is-highlighted"
+                                   role="option" data-choice="" data-id="1"
+                                   data-value="size" data-select-text=""
+                                   data-choice-selectable=""
+                                   aria-selected="true">4x6 in</div>
+                              <div id="choices--fgkd-item-choice-2"
+                                   class="choices__item choices__item--choice choices__item--selectable"
+                                   role="option" data-choice="" data-id="2"
+                                   data-value="color" data-select-text=""
+                                   data-choice-selectable="">9x6 in</div>
+                              <div id="choices--fgkd-item-choice-3"
+                                   class="choices__item choices__item--choice choices__item--selectable"
+                                   role="option" data-choice="" data-id="3"
+                                   data-value="weight" data-select-text=""
+                                   data-choice-selectable="">11x8 in</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-xl-12">
+                    <div class="d-flex flex-wrap mb-2">
+                      <h5 class="text-1000 me-2">Option 2</h5><a class="fw-bold fs--1"
+                                                                 href="https://prium.github.io/phoenix/v1.11.0/apps/e-commerce/admin/add-product.html#!">Remove</a>
+                    </div><select class="form-select mb-3">
+                    <option value="size">Size</option>
+                    <option value="color">Color</option>
+                    <option value="weight">Weight</option>
+                    <option value="smell">Smell</option>
+                  </select>
+                    <div class="product-variant-select-menu mb-3">
+                      <div class="choices" data-type="select-multiple" role="combobox"
+                           aria-autocomplete="list" aria-haspopup="true"
+                           aria-expanded="false">
+                        <div class="choices__inner"><select
+                                class="form-select mb-3 choices__input"
+                                data-choices="data-choices" multiple="multiple"
+                                data-options="{&quot;removeItemButton&quot;:true,&quot;placeholder&quot;:true}"
+                                hidden="" tabindex="-1"
+                                data-choice="active"></select>
+                          <div class="choices__list choices__list--multiple">
+                          </div><input type="text"
+                                       class="choices__input choices__input--cloned"
+                                       autocomplete="off" autocapitalize="off"
+                                       spellcheck="false" role="textbox"
+                                       aria-autocomplete="list" aria-label="null">
+                        </div>
+                        <div class="choices__list choices__list--dropdown"
+                             aria-expanded="false">
+                          <div class="choices__list" aria-multiselectable="true"
+                               role="listbox">
+                            <div id="choices--5llr-item-choice-1"
+                                 class="choices__item choices__item--choice choices__item--selectable is-highlighted"
+                                 role="option" data-choice="" data-id="1"
+                                 data-value="size" data-select-text=""
+                                 data-choice-selectable="" aria-selected="true">
+                              4x6 in</div>
+                            <div id="choices--5llr-item-choice-2"
+                                 class="choices__item choices__item--choice choices__item--selectable"
+                                 role="option" data-choice="" data-id="2"
+                                 data-value="color" data-select-text=""
+                                 data-choice-selectable="">9x6 in</div>
+                            <div id="choices--5llr-item-choice-3"
+                                 class="choices__item choices__item--choice choices__item--selectable"
+                                 role="option" data-choice="" data-id="3"
+                                 data-value="weight" data-select-text=""
+                                 data-choice-selectable="">11x8 in</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div><button class="btn btn-phoenix-primary w-100" type="button">Add
+                another option</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <footer th:replace="admin/fragments/footer :: footer"></footer>
+</div>
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/js/anchor.min.js}"></script>
+<script th:src="@{/admin/js/is.min.js}"></script>
+<script th:src="@{/admin/js/all.min.js}"></script>
+<script th:src="@{/admin/js/lodash.min.js}"></script>
+<script th:src="@{/admin/js/polyfill.min.js}"></script>
+<script th:src="@{/admin/js/list.min.js}"></script>
+<script th:src="@{/admin/js/feather.min.js}"></script>
+<script th:src="@{/admin/js/dayjs.min.js}"></script>
+<script th:src="@{/admin/js/tinymce.min.js}"></script>
+<script th:src="@{/admin/js/dropzone.min.js}"></script>
+<script th:src="@{/admin/js/choices.min.js}"></script>
+<script th:src="@{/admin/js/phoenix.js}"></script>
+
+</body>
+
+</html>

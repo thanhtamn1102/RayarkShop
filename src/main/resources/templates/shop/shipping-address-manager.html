@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản của tôi - Rayark</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+    
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/account.css}">
+
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/account.js}"></script>
+</head>
+<body>
+    <div class="wrapper container-fluid p-0">
+        <div th:replace="shop/fragments/header :: header"></div>
+
+        <div class="main px-5 py-3">
+            <div class="row">
+                <div th:replace="shop/fragments/user-account-left-nav :: user-account-left-nav"></div>
+                <div class="col-10 bg-white rounded">
+                    <fieldset class="m-5">
+                        <!--Form Địa chỉ-->
+                        <div class="row">
+                            <div class="col-6 align-self-center">
+                                <h5 style="font-weight: 400; margin: 0;">Địa Chỉ</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button id="btnAddNewShippingAddress" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAddress"><i class="fas fa-plus"></i>&nbsp; Thêm địa chỉ mới</button>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-12">
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 pl-5 pb-3">
+                                <div id="boxContact">
+                                    <p th:if="${shippingAddresses.size() == 0}">Bạn chưa cập nhật địa chỉ</p>
+                                    <th:block th:each="shippingAddress : ${shippingAddresses}">
+                                        <div class="row contact my-3">
+                                            <div class="col-10">
+                                                <label class="display-2 font-weight-normal mb-2" th:text="${shippingAddress.nameOfConsignee}"></label><br>
+                                                <label class="display-3"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;
+                                                    <span th:text="${shippingAddress.phone}"></span>
+                                                </label><br>
+                                                <label class="display-3"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;
+                                                    <span th:text="${shippingAddress.address} + ', ' + ${shippingAddress.wardName} + ', ' + ${shippingAddress.districtName} + ', ' + ${shippingAddress.provinceName}"></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-2 align-self-center text-end">
+                                                <button type="button" class="btn text-secondary btnEditShippingAddress"
+                                                        data-bs-toggle="modal" data-bs-target="#modalEditAddress"
+                                                        th:shipping-address-id="${shippingAddress.shippingAddressId}">
+                                                    <i class="far fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn text-secondary btnRemoveShippingAddress"
+                                                        data-bs-toggle="modal" data-bs-target="#removeConfirmModal"
+                                                        th:shipping-address-id="${shippingAddress.shippingAddressId}">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="shop/fragments/footer :: footer"></div>
+    </div>
+
+    <div class="modal fade" id="modalAddAddress" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+<!--                <form action="/accounts/shipping-addresses/add" method="get">-->
+                    <div class="modal-header px-5 pt-4">
+                        <h5 class="modal-title">Địa Chỉ Mới</h5>
+                    </div>
+                    <div class="modal-body px-5 py-4">
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="txt-name-of-consignee" name="nameOfConsignee" placeholder="Họ và tên người nhận">
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="txt-phone" name="phone" placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <select class="form-select" id="province-form-select" name="provinceId">
+                                    <option value="0">Tỉnh/Thành phố</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <select class="form-select" id="district-form-select" name="districtId">
+                                    <option value="0">Quận/Huyện</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <select class="form-select" id="ward-form-select" name="wardId">
+                                    <option value="0">Phường/Xã</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-12">
+                                <input class="form-control" type="text" id="txt-address" name="address" placeholder="Tòa nhà, Tên đường...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-5 py-4">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">TRỞ LẠI</button>
+                        <button type="button" class="btn btn-primary" id="btnSaveShippingAddress">HOÀN THÀNH</button>
+                    </div>
+<!--                </form>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditAddress" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <input hidden type="number" id="editShippingAddressId">
+
+                <!--                <form action="/accounts/shipping-addresses/add" method="get">-->
+                <div class="modal-header px-5 pt-4">
+                    <h5 class="modal-title">Địa Chỉ Mới</h5>
+                </div>
+                <div class="modal-body px-5 py-4">
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <input type="text" class="form-control" name="nameOfConsignee" placeholder="Họ và tên người nhận">
+                        </div>
+                    </div>
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+                        </div>
+                    </div>
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <select class="form-select" name="provinceId">
+                                <option value="0">Tỉnh/Thành phố</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <select class="form-select" name="districtId">
+                                <option value="0">Quận/Huyện</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <select class="form-select" name="wardId">
+                                <option value="0">Phường/Xã</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row py-2">
+                        <div class="col-12">
+                            <input class="form-control" type="text" name="address" placeholder="Tòa nhà, Tên đường...">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer px-5 py-4">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">TRỞ LẠI</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveEditShippingAddress">HOÀN THÀNH</button>
+                </div>
+                <!--                </form>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="removeConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa địa chỉ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa địa chỉ này?</p>
+                    <input hidden type="text" class="form-control" id="removeShippingAddressId" name="shippingAddressId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmitRemove">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#btnAddNewShippingAddress').on('click', function () {
+                loadFormAddAddress();
+            });
+
+            let modalEditAddress = document.getElementById('modalEditAddress')
+            modalEditAddress.addEventListener('show.bs.modal', function (event) {
+                let button = event.relatedTarget
+                let shippingAddressId = button.getAttribute('shipping-address-id');
+                $('#editShippingAddressId').val(shippingAddressId)
+
+                loadFormEditAddress();
+
+                $.ajax({
+                    url: '/api/shipping-address/get',
+                    method: 'GET',
+                    contentType: 'application/json',
+                    data: {
+                        shippingAddressId: shippingAddressId
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        let modal = $('#modalEditAddress');
+                        modal.find('[name="nameOfConsignee"]').val(response.nameOfConsignee);
+                        modal.find('[name="phone"]').val(response.phone);
+                        modal.find('[name="provinceId"]').val(response.provinceCode);
+                        modal.find('[name="districtId"]').val(response.districtCode);
+                        modal.find('[name="wardId"]').val(response.wardCode);
+                        modal.find('[name="address"]').val(response.address);
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $('#btnSaveEditShippingAddress').on('click', function () {
+                let modal = $('#modalEditAddress');
+                let shippingAddressId = $('#editShippingAddressId').val();
+                let nameOfConsignee = modal.find('[name="nameOfConsignee"]').val();
+                let phone = modal.find('[name="phone"]').val();
+                let provinceId = modal.find('[name="provinceId"]').val();
+                let districtId = modal.find('[name="districtId"]').val();
+                let wardId = modal.find('[name="wardId"]').val();
+                let address = modal.find('[name="address"]').val();
+
+                editShippingAddress(shippingAddressId, nameOfConsignee, phone, provinceId, districtId, wardId, address);
+            });
+
+            let removeConfirmModal = document.getElementById('removeConfirmModal')
+            removeConfirmModal.addEventListener('show.bs.modal', function (event) {
+                let button = event.relatedTarget
+                let removeId = button.getAttribute('shipping-address-id');
+                $('#removeShippingAddressId').val(removeId)
+            })
+
+            $('#btnSubmitRemove').on('click', function () {
+                let shippingAddressId = parseInt($('#removeShippingAddressId').val());
+                removeShippingAddress(shippingAddressId);
+            });
+        });
+
+        function editShippingAddress(shippingAddressId,
+                                     nameOfConsignee,
+                                     phone,
+                                     provinceId,
+                                     districtId,
+                                     wardId,
+                                     address) {
+            $.ajax({
+                url: '/api/shipping-address/update',
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    shippingAddressId: shippingAddressId,
+                    nameOfConsignee: nameOfConsignee,
+                    phone: phone,
+                    provinceCode: provinceId,
+                    districtCode: districtId,
+                    wardCode: wardId,
+                    address: address
+                }),
+                success: function(response) {
+                    console.log('response: ' + response);
+                    if(response != null) {
+                        location.reload();
+                    } else {
+
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function removeShippingAddress(shippingAddressId) {
+            $.ajax({
+                url: '/api/shipping-address/remove',
+                method: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    shippingAddressId: shippingAddressId
+                }),
+                success: function(response) {
+                    console.log('response: ' + response);
+                    if(response == true) {
+                        location.reload();
+                    } else {
+
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function loadFormAddAddress() {
+            let provinceFormSelect = $('#province-form-select');
+            let districtFormSelect = $('#district-form-select');
+            let wardFormSelect = $('#ward-form-select');
+            let btnSaveShippingAddress = $('#btnSaveShippingAddress');
+
+            btnSaveShippingAddress.on('click', function () {
+                let nameOfConsignee = $('#txt-name-of-consignee').val();
+                let phone = $('#txt-phone').val();
+                let provinceId = provinceFormSelect.val();
+                let districtId = districtFormSelect.val();
+                let wardId = wardFormSelect.val();
+                let address = $('#txt-address').val();
+
+                console.log(nameOfConsignee);
+                console.log(phone);
+                console.log(districtId);
+                console.log(provinceId);
+                console.log(wardId);
+                console.log(address);
+
+                $.ajax({
+                    url: '/api/shipping-address/add',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        customerId: 1,
+                        nameOfConsignee: nameOfConsignee,
+                        phone: phone,
+                        provinceCode: provinceId,
+                        districtCode: districtId,
+                        wardCode: wardId,
+                        address: address
+                    }),
+                    success: function(response) {
+                        console.log('response: ' + response);
+                        if(response != null) {
+                            location.reload();
+                        } else {
+
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+
+            $.ajax({
+                url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    query: 'query { getAllProvinces { code, name } }'
+                }),
+                success: function(response) {
+                    const provinces = response.data.getAllProvinces;
+
+                    provinceFormSelect.empty();
+
+                    provinces.forEach(function(province) {
+                        const option = $('<option>').val(province.code).text(province.name);
+                        provinceFormSelect.append(option);
+                    });
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+
+            provinceFormSelect.change(function () {
+                let provinceCode = provinceFormSelect.val();
+
+                $.ajax({
+                    url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        query: 'query { getDistrictsByProvince(provinceId: "' + provinceCode + '") { code, name } }'
+                    }),
+                    success: function(response) {
+                        const districts = response.data.getDistrictsByProvince;
+
+                        districtFormSelect.empty();
+
+                        districts.forEach(function(district) {
+                            const option = $('<option>').val(district.code).text(district.name);
+                            districtFormSelect.append(option);
+                        });
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            districtFormSelect.change(function () {
+                let districtCode = districtFormSelect.val();
+
+                $.ajax({
+                    url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        query: 'query { getWardsByDistrict(districtId: "' + districtCode + '") { code, name } }'
+                    }),
+                    success: function(response) {
+                        const wards = response.data.getWardsByDistrict;
+
+                        wardFormSelect.empty();
+
+                        wards.forEach(function(ward) {
+                            const option = $('<option>').val(ward.code).text(ward.name);
+                            wardFormSelect.append(option);
+                        });
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+        }
+
+        function loadFormEditAddress() {
+            let modalEditAddress = $('#modalEditAddress');
+            let provinceFormSelect = modalEditAddress.find('[name="provinceId"]');
+            let districtFormSelect = modalEditAddress.find('[name="districtId"]');
+            let wardFormSelect = modalEditAddress.find('[name="wardId"]');
+
+            $.ajax({
+                url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    query: 'query { getAllProvinces { code, name } }'
+                }),
+                success: function(response) {
+                    const provinces = response.data.getAllProvinces;
+
+                    provinceFormSelect.empty();
+
+                    provinces.forEach(function(province) {
+                        const option = $('<option>').val(province.code).text(province.name);
+                        provinceFormSelect.append(option);
+                    });
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+
+            provinceFormSelect.change(function () {
+                let provinceCode = provinceFormSelect.val();
+
+                $.ajax({
+                    url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        query: 'query { getDistrictsByProvince(provinceId: "' + provinceCode + '") { code, name } }'
+                    }),
+                    success: function(response) {
+                        const districts = response.data.getDistrictsByProvince;
+
+                        districtFormSelect.empty();
+
+                        districts.forEach(function(district) {
+                            const option = $('<option>').val(district.code).text(district.name);
+                            districtFormSelect.append(option);
+                        });
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            districtFormSelect.change(function () {
+                let districtCode = districtFormSelect.val();
+
+                $.ajax({
+                    url: 'https://vn-provinces-api-production.up.railway.app/graphql',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        query: 'query { getWardsByDistrict(districtId: "' + districtCode + '") { code, name } }'
+                    }),
+                    success: function(response) {
+                        const wards = response.data.getWardsByDistrict;
+
+                        wardFormSelect.empty();
+
+                        wards.forEach(function(ward) {
+                            const option = $('<option>').val(ward.code).text(ward.name);
+                            wardFormSelect.append(option);
+                        });
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+.box-search {
+    border: 1px solid dodgerblue;
+    border-radius: 5px;
+}
+
+.product {
+    margin-bottom: 7px;
+}
+
+.product-image {
+    width: 100%;
+}
+
+.product-name {
+    margin: 0;
+}
+
+.product-price {
+    color: tomato;
+}
+
+.num-of-product {
+    font-size: 13px;
+    margin: 0;
+}
+
+.total-amount {
+    font-size: 25px;
+    color: tomato;
+}
+
+.box-product .btn-outline-secondary {
+    border-color: gainsboro;
+    color: rgba(0, 0, 0, .8);
+}
+.box-product .btn-outline-secondary:hover {
+    background-color: transparent;
+    border-color: tomato;
+    color: tomato;
+}
+
+.no-other {
+    height: 550px; 
+    display: flex; 
+    align-items: center;
+    display: none;
+}
+
+.address input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+}
+
+.address .line {
+    margin-top: 10px;
+}
+
+#notification {
+    position: fixed;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+#notification.show {
+    opacity: 1;
+}
+
+#notification span {
+    display: block;
+}
