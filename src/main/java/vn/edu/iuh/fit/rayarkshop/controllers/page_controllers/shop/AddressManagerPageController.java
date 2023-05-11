@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.CustomerService;
@@ -34,7 +35,7 @@ public class AddressManagerPageController {
     private AccountService accountService;
 
     @GetMapping("")
-    public String addressManagerPage(Model model) {
+    public ModelAndView addressManagerPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
@@ -42,31 +43,37 @@ public class AddressManagerPageController {
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
 
-        model.addAttribute("shippingAddresses", shippingAddresses);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/shipping-address-manager";
+        modelAndView.addObject("shippingAddresses", shippingAddresses);
+
+        modelAndView.setViewName("/shop/shipping-address-manager");
+
+        return modelAndView;
     }
 
     @PostMapping("/remove")
-    public String removeAddress(@RequestParam(defaultValue = "1") int customerId,
-                                @RequestParam int shippingAddressId,
-                                Model model) {
+    public ModelAndView removeAddress(@RequestParam(defaultValue = "1") int customerId,
+                                @RequestParam int shippingAddressId) {
         shippingAddressService.removeById(shippingAddressId);
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
 
-        model.addAttribute("shippingAddresses", shippingAddresses);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/shipping-address-manager";
+        modelAndView.addObject("shippingAddresses", shippingAddresses);
+
+        modelAndView.setViewName("/shop/shipping-address-manager");
+
+        return modelAndView;
     }
 
     @GetMapping("/add")
-    public String addAddress(@RequestParam String nameOfConsignee,
+    public ModelAndView addAddress(@RequestParam String nameOfConsignee,
                              @RequestParam String phone,
                              @RequestParam String provinceId,
                              @RequestParam String districtId,
                              @RequestParam String wardId,
-                             @RequestParam String address,
-                             Model model) {
+                             @RequestParam String address) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
@@ -99,9 +106,13 @@ public class AddressManagerPageController {
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
 
-        model.addAttribute("shippingAddresses", shippingAddresses);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/shipping-address-manager";
+        modelAndView.addObject("shippingAddresses", shippingAddresses);
+
+        modelAndView.setViewName("/shop/shipping-address-manager");
+
+        return modelAndView;
     }
 
 }

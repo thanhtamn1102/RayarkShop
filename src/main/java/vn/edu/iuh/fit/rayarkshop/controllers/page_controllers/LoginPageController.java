@@ -27,16 +27,21 @@ public class LoginPageController {
     }
 
     @GetMapping("/success")
-    public String loginSuccess(Model model) {
+    public ModelAndView loginSuccess() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
 
-        model.addAttribute("account", account);
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("account", account);
 
         if(account.getRoles().contains(Role.ROLE_ADMIN))
-            return "/admin/admin";
-        return "/shop/home";
+            modelAndView.setViewName("/admin/admin");
+        else
+            modelAndView.setViewName("/shop/home");
+
+        return modelAndView;
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Person;
 import vn.edu.iuh.fit.rayarkshop.models.requests.AccountInfoUpdateRequest;
@@ -27,16 +28,20 @@ public class AccountInfoPageController {
 
 
     @GetMapping("")
-    public String accountInfoPage(Model model) {
+    public ModelAndView accountInfoPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         Account account = accountService.getAccountByUserNameOrEmail(username);
 
-        model.addAttribute("account", account);
-        model.addAttribute("person", account.getPerson());
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/account-info";
+        modelAndView.addObject("account", account);
+        modelAndView.addObject("person", account.getPerson());
+
+        modelAndView.setViewName("/shop/account-info");
+
+        return modelAndView;
     }
 
 }

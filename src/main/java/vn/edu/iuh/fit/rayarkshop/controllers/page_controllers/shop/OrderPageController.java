@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.ProductReview;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
 import vn.edu.iuh.fit.rayarkshop.models.requests.ProductReviewRequest;
@@ -25,8 +26,7 @@ public class OrderPageController {
     private ProductReviewService productReviewService;
 
     @GetMapping("")
-    public String orderPage(@RequestParam long salesOrderId,
-                            Model model) {
+    public ModelAndView orderPage(@RequestParam long salesOrderId) {
         SalesOrder salesOrder = salesOrderService.findById(salesOrderId);
         List<ProductReview> productReviews = new ArrayList<>();
 
@@ -34,10 +34,14 @@ public class OrderPageController {
             productReviews = productReviewService.findProductReviewsBySalesOrderId(salesOrder.getId());
         }
 
-        model.addAttribute("salesOrder", salesOrder);
-        model.addAttribute("productReviews", productReviews);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/order";
+        modelAndView.addObject("salesOrder", salesOrder);
+        modelAndView.addObject("productReviews", productReviews);
+
+        modelAndView.setViewName("shop/order");
+
+        return modelAndView;
     }
 
 

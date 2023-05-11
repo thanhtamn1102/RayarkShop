@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
 import vn.edu.iuh.fit.rayarkshop.services.SalesOrderService;
 
@@ -17,14 +18,18 @@ public class OrderSuccessPageController {
     private SalesOrderService salesOrderService;
 
     @GetMapping("/success")
-    public String orderSuccessPage(@RequestParam long id, Model model) {
+    public ModelAndView orderSuccessPage(@RequestParam long id) {
         SalesOrder salesOrder = salesOrderService.findById(id);
         if(salesOrder == null)
             throw new RuntimeException("Sales Order Not Found");
 
-        model.addAttribute("salesOrder", salesOrder);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/sales-order-success";
+        modelAndView.addObject("salesOrder", salesOrder);
+
+        modelAndView.setViewName("/shop/sales-order-success");
+
+        return modelAndView;
     }
 
 

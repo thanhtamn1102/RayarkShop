@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Product;
 import vn.edu.iuh.fit.rayarkshop.services.*;
@@ -32,7 +33,7 @@ public class HomePageController {
     private AccountService accountService;
 
     @GetMapping(value = {"/", "/home"})
-    public String homePage(Model model) {
+    public ModelAndView homePage() {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,12 +53,16 @@ public class HomePageController {
         List<Product> newProducts = productService.findNewProducts(10);
         List<Product> bestRattingProducts = productService.findBestRattingProducts(10);
 
-        model.addAttribute("bestSellProducts", bestSellProducts);
-        model.addAttribute("newProducts", newProducts);
-        model.addAttribute("bestRattingProducts", bestRattingProducts);
-        model.addAttribute("favoriteProductListItems", favoriteProductListItems);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "/shop/home";
+        modelAndView.addObject("bestSellProducts", bestSellProducts);
+        modelAndView.addObject("newProducts", newProducts);
+        modelAndView.addObject("bestRattingProducts", bestRattingProducts);
+        modelAndView.addObject("favoriteProductListItems", favoriteProductListItems);
+
+        modelAndView.setViewName("/shop/home");
+
+        return modelAndView;
     }
 
 }

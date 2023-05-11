@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.*;
 
@@ -42,12 +43,11 @@ public class ProductPageController {
     private ProductReviewService productReviewService;
 
     @GetMapping("")
-    public String productPage(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "9") int size,
-                              @RequestParam(defaultValue = "name-asc") String sort,
-                              @RequestParam(name = "brands", required = false) Optional<List<Integer>> brandFilters,
-                              @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters,
-                              Model model) {
+    public ModelAndView productPage(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "9") int size,
+                                    @RequestParam(defaultValue = "name-asc") String sort,
+                                    @RequestParam(name = "brands", required = false) Optional<List<Integer>> brandFilters,
+                                    @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters) {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,25 +75,28 @@ public class ProductPageController {
                 PageRequest.of(page, size, sortArr[1].equals("asc") ? Sort.by(sortArr[0]).ascending() : Sort.by(sortArr[0]).descending())
         );
 
-        model.addAttribute("pageInfo", pageInfo);
-        model.addAttribute("brands", brands);
-        model.addAttribute("productCategories", productCategories);
-        model.addAttribute("sort", sort);
-        model.addAttribute("brandFilters", brandFilters.isPresent() ? brandFilters.get() : new ArrayList<>());
-        model.addAttribute("categoryFilters", categoryFilters.isPresent() ? categoryFilters.get() : new ArrayList<>());
-        model.addAttribute("favoriteProductListItems", favoriteProductListItems);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/search-result";
+        modelAndView.addObject("pageInfo", pageInfo);
+        modelAndView.addObject("brands", brands);
+        modelAndView.addObject("productCategories", productCategories);
+        modelAndView.addObject("sort", sort);
+        modelAndView.addObject("brandFilters", brandFilters.isPresent() ? brandFilters.get() : new ArrayList<>());
+        modelAndView.addObject("categoryFilters", categoryFilters.isPresent() ? categoryFilters.get() : new ArrayList<>());
+        modelAndView.addObject("favoriteProductListItems", favoriteProductListItems);
+
+        modelAndView.setViewName("shop/search-result");
+
+        return modelAndView;
     }
 
     @GetMapping("/search")
-    public String searchProduct(@RequestParam(defaultValue = "0") int page,
+    public ModelAndView searchProduct(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "9") int size,
                                 @RequestParam(defaultValue = "name-asc") String sort,
                                 @RequestParam(name = "brands", required = false) Optional<List<Integer>> brandFilters,
                                 @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters,
-                                @RequestParam String key,
-                                Model model) {
+                                @RequestParam String key) {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -113,21 +116,24 @@ public class ProductPageController {
         List<Brand> brands = brandService.getAll();
         List<ProductCategory> productCategories = productCategoryService.getAll();
 
-        model.addAttribute("pageInfo", pageInfo);
-        model.addAttribute("brands", brands);
-        model.addAttribute("productCategories", productCategories);
-        model.addAttribute("key", key);
-        model.addAttribute("sort", sort);
-        model.addAttribute("brandFilters", brandFilters.isPresent() ? brandFilters.get() : new ArrayList<>());
-        model.addAttribute("categoryFilters", categoryFilters.isPresent() ? categoryFilters.get() : new ArrayList<>());
-        model.addAttribute("favoriteProductListItems", favoriteProductListItems);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/search-result";
+        modelAndView.addObject("pageInfo", pageInfo);
+        modelAndView.addObject("brands", brands);
+        modelAndView.addObject("productCategories", productCategories);
+        modelAndView.addObject("key", key);
+        modelAndView.addObject("sort", sort);
+        modelAndView.addObject("brandFilters", brandFilters.isPresent() ? brandFilters.get() : new ArrayList<>());
+        modelAndView.addObject("categoryFilters", categoryFilters.isPresent() ? categoryFilters.get() : new ArrayList<>());
+        modelAndView.addObject("favoriteProductListItems", favoriteProductListItems);
+
+        modelAndView.setViewName("shop/search-result");
+
+        return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public String getProduct(@PathVariable(name = "id") String id,
-                             Model model) {
+    public ModelAndView getProduct(@PathVariable(name = "id") String id) {
         FavoriteProductListItem favoriteProductListItem = null;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -160,12 +166,16 @@ public class ProductPageController {
             productReviews = productReviewService.findProductReviewsByProductId(product.getId());
         }
 
-        model.addAttribute("product", product);
-        model.addAttribute("productFromCategory", productFromCategory);
-        model.addAttribute("favoriteProduct", favoriteProductListItem != null ? true : false);
-        model.addAttribute("productReviews", productReviews);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/single-product";
+        modelAndView.addObject("product", product);
+        modelAndView.addObject("productFromCategory", productFromCategory);
+        modelAndView.addObject("favoriteProduct", favoriteProductListItem != null ? true : false);
+        modelAndView.addObject("productReviews", productReviews);
+
+        modelAndView.setViewName("shop/single-product");
+
+        return modelAndView;
     }
 
 }

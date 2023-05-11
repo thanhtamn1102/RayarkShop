@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.OrderStatus;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
@@ -29,7 +30,7 @@ public class OrderManagerPageController {
     private AccountService accountService;
 
     @GetMapping("")
-    public String orderManagerPage(Model model) {
+    public ModelAndView orderManagerPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
@@ -69,20 +70,23 @@ public class OrderManagerPageController {
             salesOrders = new ArrayList<>();
         }
 
-        model.addAttribute("salesOrders", salesOrders);
-        model.addAttribute("dsDonHangChoXacNhan", dsDonHangChoXacNhan);
-        model.addAttribute("dsDonHangDangXuLy", dsDonHangDangXuLy);
-        model.addAttribute("dsDonHangDangGiao", dsDonHangDangGiao);
-        model.addAttribute("dsDonHangDaGiao", dsDonHangDaGiao);
-        model.addAttribute("dsDonHangDaHoanThanh", dsDonHangDaHoanThanh);
-        model.addAttribute("dsDonHangDaHuy", dsDonHangDaHuy);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/order_management";
+        modelAndView.addObject("salesOrders", salesOrders);
+        modelAndView.addObject("dsDonHangChoXacNhan", dsDonHangChoXacNhan);
+        modelAndView.addObject("dsDonHangDangXuLy", dsDonHangDangXuLy);
+        modelAndView.addObject("dsDonHangDangGiao", dsDonHangDangGiao);
+        modelAndView.addObject("dsDonHangDaGiao", dsDonHangDaGiao);
+        modelAndView.addObject("dsDonHangDaHoanThanh", dsDonHangDaHoanThanh);
+        modelAndView.addObject("dsDonHangDaHuy", dsDonHangDaHuy);
+
+        modelAndView.setViewName("shop/order_management");
+
+        return modelAndView;
     }
 
     @GetMapping("/search")
-    public String searchOrder(@RequestParam String searchKey,
-                              Model model) {
+    public ModelAndView searchOrder(@RequestParam String searchKey) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
@@ -138,15 +142,19 @@ public class OrderManagerPageController {
             salesOrders = new ArrayList<>();
         }
 
-        model.addAttribute("salesOrders", searchResult);
-        model.addAttribute("dsDonHangChoXacNhan", dsDonHangChoXacNhan);
-        model.addAttribute("dsDonHangDangXuLy", dsDonHangDangXuLy);
-        model.addAttribute("dsDonHangDangGiao", dsDonHangDangGiao);
-        model.addAttribute("dsDonHangDaGiao", dsDonHangDaGiao);
-        model.addAttribute("dsDonHangDaHoanThanh", dsDonHangDaHoanThanh);
-        model.addAttribute("dsDonHangDaHuy", dsDonHangDaHuy);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/order_management";
+        modelAndView.addObject("salesOrders", searchResult);
+        modelAndView.addObject("dsDonHangChoXacNhan", dsDonHangChoXacNhan);
+        modelAndView.addObject("dsDonHangDangXuLy", dsDonHangDangXuLy);
+        modelAndView.addObject("dsDonHangDangGiao", dsDonHangDangGiao);
+        modelAndView.addObject("dsDonHangDaGiao", dsDonHangDaGiao);
+        modelAndView.addObject("dsDonHangDaHoanThanh", dsDonHangDaHoanThanh);
+        modelAndView.addObject("dsDonHangDaHuy", dsDonHangDaHuy);
+
+        modelAndView.setViewName("shop/order_management");
+
+        return modelAndView;
     }
 
 }

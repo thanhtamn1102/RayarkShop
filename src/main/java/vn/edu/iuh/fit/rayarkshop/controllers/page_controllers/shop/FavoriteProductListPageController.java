@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.FavoriteProductListItem;
 import vn.edu.iuh.fit.rayarkshop.services.AccountService;
@@ -26,7 +27,7 @@ public class FavoriteProductListPageController {
     private AccountService accountService;
 
     @GetMapping("")
-    public String favoriteProductListManagerPage(Model model) {
+    public ModelAndView favoriteProductListManagerPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
@@ -34,9 +35,13 @@ public class FavoriteProductListPageController {
 
         List<FavoriteProductListItem> favoriteProductListItems = favoriteProductListItemService.getByCustomer(customerId);
 
-        model.addAttribute("favoriteProductListItems", favoriteProductListItems);
+        ModelAndView modelAndView = new ModelAndView();
 
-        return "shop/favorite-product-list-manager";
+        modelAndView.addObject("favoriteProductListItems", favoriteProductListItems);
+
+        modelAndView.setViewName("shop/favorite-product-list-manager");
+
+        return modelAndView;
     }
 
 }
