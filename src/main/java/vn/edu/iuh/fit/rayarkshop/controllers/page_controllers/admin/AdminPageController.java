@@ -11,7 +11,7 @@ public class AdminPageController {
     public ModelAndView adminPage() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("/admin/admin");
+        modelAndView.setViewName("admin/admin");
 
         return modelAndView;
     }

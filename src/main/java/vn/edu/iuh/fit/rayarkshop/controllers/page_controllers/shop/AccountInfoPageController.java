@@ -39,7 +39,7 @@ public class AccountInfoPageController {
         modelAndView.addObject("account", account);
         modelAndView.addObject("person", account.getPerson());
 
-        modelAndView.setViewName("/shop/account-info");
+        modelAndView.setViewName("shop/account-info");
 
         return modelAndView;
     }

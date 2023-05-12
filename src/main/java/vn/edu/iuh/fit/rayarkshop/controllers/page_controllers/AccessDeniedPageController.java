@@ -10,7 +10,7 @@ public class AccessDeniedPageController {
     @GetMapping("/access-denied")
     public ModelAndView accessDeniedPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/access-denied");
+        modelAndView.setViewName("access-denied");
         return modelAndView;
     }
 

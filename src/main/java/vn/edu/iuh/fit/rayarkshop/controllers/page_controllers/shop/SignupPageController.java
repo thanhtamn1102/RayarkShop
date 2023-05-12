@@ -17,7 +17,7 @@ public class SignupPageController {
     @GetMapping("")
     public ModelAndView signupPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/shop/signup");
+        modelAndView.setViewName("shop/signup");
         return modelAndView;
     }
 

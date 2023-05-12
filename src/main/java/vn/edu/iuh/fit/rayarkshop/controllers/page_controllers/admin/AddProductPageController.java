@@ -33,7 +33,7 @@ public class AddProductPageController {
         modelAndView.addObject("productCategories", productCategories);
         modelAndView.addObject("brands", brands);
 
-        modelAndView.setViewName("/admin/add-product");
+        modelAndView.setViewName("admin/add-product");
 
         return modelAndView;
     }

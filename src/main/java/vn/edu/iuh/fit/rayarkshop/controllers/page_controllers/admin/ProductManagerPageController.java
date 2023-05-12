@@ -45,7 +45,7 @@ public class ProductManagerPageController {
         modelAndView.addObject("productCategories", productCategories);
         modelAndView.addObject("brands", brands);
 
-        modelAndView.setViewName("/admin/product-manager");
+        modelAndView.setViewName("admin/product-manager");
 
         return modelAndView;
     }

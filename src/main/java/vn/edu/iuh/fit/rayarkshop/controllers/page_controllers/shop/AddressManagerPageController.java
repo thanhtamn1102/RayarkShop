@@ -47,7 +47,7 @@ public class AddressManagerPageController {
 
         modelAndView.addObject("shippingAddresses", shippingAddresses);
 
-        modelAndView.setViewName("/shop/shipping-address-manager");
+        modelAndView.setViewName("shop/shipping-address-manager");
 
         return modelAndView;
     }
@@ -62,7 +62,7 @@ public class AddressManagerPageController {
 
         modelAndView.addObject("shippingAddresses", shippingAddresses);
 
-        modelAndView.setViewName("/shop/shipping-address-manager");
+        modelAndView.setViewName("shop/shipping-address-manager");
 
         return modelAndView;
     }
@@ -110,7 +110,7 @@ public class AddressManagerPageController {
 
         modelAndView.addObject("shippingAddresses", shippingAddresses);
 
-        modelAndView.setViewName("/shop/shipping-address-manager");
+        modelAndView.setViewName("shop/shipping-address-manager");
 
         return modelAndView;
     }

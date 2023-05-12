@@ -27,7 +27,7 @@ public class OrderSuccessPageController {
 
         modelAndView.addObject("salesOrder", salesOrder);
 
-        modelAndView.setViewName("/shop/sales-order-success");
+        modelAndView.setViewName("shop/sales-order-success");
 
         return modelAndView;
     }

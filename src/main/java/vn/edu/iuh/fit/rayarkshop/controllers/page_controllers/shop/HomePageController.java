@@ -60,7 +60,7 @@ public class HomePageController {
         modelAndView.addObject("bestRattingProducts", bestRattingProducts);
         modelAndView.addObject("favoriteProductListItems", favoriteProductListItems);
 
-        modelAndView.setViewName("/shop/home");
+        modelAndView.setViewName("shop/home");
 
         return modelAndView;
     }

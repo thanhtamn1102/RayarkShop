@@ -37,9 +37,9 @@ public class LoginPageController {
         modelAndView.addObject("account", account);
 
         if(account.getRoles().contains(Role.ROLE_ADMIN))
-            modelAndView.setViewName("/admin/admin");
+            modelAndView.setViewName("admin/admin");
         else
-            modelAndView.setViewName("/shop/home");
+            modelAndView.setViewName("shop/home");
 
         return modelAndView;
     }
