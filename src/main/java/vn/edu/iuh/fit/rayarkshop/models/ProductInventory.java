@@ -31,4 +31,9 @@ public class ProductInventory {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    public ProductInventory(Product product, ProductVariation productVariation, int quantity) {
+        this.product = product;
+        this.productVariation = productVariation;
+        this.quantity = quantity;
+    }
 }

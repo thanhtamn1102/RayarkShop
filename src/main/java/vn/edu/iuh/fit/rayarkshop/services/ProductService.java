@@ -3,6 +3,7 @@ package vn.edu.iuh.fit.rayarkshop.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.Product;
 import vn.edu.iuh.fit.rayarkshop.models.ProductCategory;
 
@@ -16,6 +17,8 @@ public interface ProductService {
     List<Product> saveAll(List<Product> products);
 
     Page<Product> findAll(Pageable pageable);
+
+    Page<Product> findAllProductByProductStatus(int productStatus, Pageable pageable);
 
     List<Product> findAll();
 
@@ -32,5 +35,7 @@ public interface ProductService {
     List<Product> findNewProducts(int n);
 
     List<Product> findBestRattingProducts(int n);
+
+    boolean deleteProductById(int productId) throws NotFoundException;
 
 }

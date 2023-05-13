@@ -1,6 +1,8 @@
 package vn.edu.iuh.fit.rayarkshop.services.impls;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import vn.edu.iuh.fit.rayarkshop.models.OrderCancelDetail;
 import vn.edu.iuh.fit.rayarkshop.models.OrderStatus;
@@ -51,5 +53,15 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         SalesOrder updated = save(salesOrder);
 
         return updated != null ? true : false;
+    }
+
+    @Override
+    public Page<SalesOrder> findAll(Pageable pageable) {
+        return salesOrderRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<SalesOrder> findAllByStatus(OrderStatus orderStatus, Pageable pageable) {
+        return salesOrderRepository.findAllByStatus(orderStatus, pageable);
     }
 }

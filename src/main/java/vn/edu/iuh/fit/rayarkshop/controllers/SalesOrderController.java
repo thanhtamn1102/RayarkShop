@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.models.mappers.SalesOrderDetailMapper;
 import vn.edu.iuh.fit.rayarkshop.models.requests.HuyDonHangRequest;
@@ -119,6 +120,32 @@ public class SalesOrderController {
             return ResponseEntity.ok(b.size() > 0 ? Boolean.TRUE : Boolean.FALSE);
         }
         return ResponseEntity.ok(Boolean.FALSE);
+    }
+
+    @PutMapping("/update-status")
+    public ResponseEntity<?> updateStatus(@RequestBody Map<String, Object> body) {
+        String orderIdString = (String) body.get("salesOrderId");
+        long orderId = -1;
+        try {
+            orderId = Long.parseLong(orderIdString);
+        } catch (Exception ex) {
+            throw new RuntimeException("Order Id Is Not A Number");
+        }
+
+        SalesOrder salesOrder = salesOrderService.findById(orderId);
+
+        if(salesOrder == null)
+            throw new NotFoundException("Order Not Found");
+
+        int salesOrderStatus = (int) body.get("salesOrderStatus");
+        salesOrder.setStatus(OrderStatus.values()[salesOrderStatus]);
+
+        System.out.println(orderIdString);
+        System.out.println(salesOrderStatus);
+
+        SalesOrder saved = salesOrderService.save(salesOrder);
+
+        return ResponseEntity.ok(saved == null ? Boolean.FALSE : Boolean.TRUE);
     }
 
     public boolean addToCart(Customer customer, int productId, ProductVariation productVariation, int quantity) {

@@ -1,0 +1,62 @@
+.main nav .icon {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    float: left;
+    border-radius: 50%;
+    margin-top: 2px;
+    margin-right: 7px;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+}
+
+.main nav a:hover {
+    color: tomato !important;
+}
+
+.main .active {
+    color: tomato !important;
+}
+
+.main .love-product {
+    border: 1px solid gainsboro;
+    border-radius: 5px;
+}
+
+.main .love-product {
+    box-shadow: 2px 2px 5px gainsboro;
+}
+
+.main .love-product img {
+    width: 100%;
+}
+
+.main .love-product .product-name {
+    margin-bottom: 10px;
+}
+
+.main .love-product .product-price {
+    color: tomato;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.box-product table tr {
+    font-size: 13px;
+}
+
+.box-product table tr button {
+    font-size: 13px;
+}
+
+.paging a {
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.paging .active {
+    color: white;
+}

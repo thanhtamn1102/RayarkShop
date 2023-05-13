@@ -14,4 +14,6 @@ public interface BrandService {
 
     List<Brand> getAll();
 
+    Brand getById(int brandId);
+
 }

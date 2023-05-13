@@ -20,6 +20,7 @@ public class OrderSuccessPageController {
     @GetMapping("/success")
     public ModelAndView orderSuccessPage(@RequestParam long id) {
         SalesOrder salesOrder = salesOrderService.findById(id);
+
         if(salesOrder == null)
             throw new RuntimeException("Sales Order Not Found");
 

@@ -29,5 +29,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.findAll();
     }
 
+    @Override
+    public ProductCategory getById(int productCategoryId) {
+        return productCategoryRepository.findById(productCategoryId).orElse(null);
+    }
+
 
 }

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý sản phẩm - Rayark</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" href="../img/icon.png" />
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/css/notification.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/product-manager.css}">
+
+</head>
+<body>
+<div class="wrapper container-fluid p-0">
+  <div th:replace="admin/fragments/admin-header :: admin-header"></div>
+
+  <div class="main px-5 py-3">
+    <div class="row">
+      <div class="col-2 py-3">
+        <div class="row">
+          <div class="col-12">
+              <div th:replace="admin/fragments/admin-left-nav :: admin-left-nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 p-5 bg-white rounded">
+        <div class="row pb-3">
+            <div class="col">
+                <h3>Quản lý sản phẩm</h3>
+            </div>
+            <div class="col text-end">
+              <a class="btn btn-success" href="/admin/product-manager/add-product">Thêm sản phẩm</a>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <form action="/admin/product-manager/search" method="get">
+                <input type="text" name="keyword" id="" class="form-control" placeholder="Tìm kiếm sản phẩm theo tên sản phẩm" aria-describedby="helpId">
+            </form>
+          </div>
+          <div class="col">
+            <button class="btn btn-warning"><i class="fas fa-filter text-white"></i></button>
+          </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#alltab"
+                    type="button" role="tab" aria-controls="home" aria-selected="true">All
+              <span th:text="${'(' + pageInfo.getTotalElements() + ')'}"></span></button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#dangBanTab"
+                    type="button" role="tab" aria-controls="profile" aria-selected="false">Đang bán
+              <span th:text="${'(' + pageInfoDangBan.getTotalElements() + ')'}"></span></button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#daAnTab"
+                    type="button" role="tab" aria-controls="profile" aria-selected="false">Đã Ẩn
+              <span th:text="${'(' + pageInfoDaAn.getTotalElements() + ')'}"></span></button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ngungKinhDoanhTab"
+                    type="button" role="tab" aria-controls="profile" aria-selected="false">Ngừng kinh doanh
+              <span th:text="${'(' + pageInfoNgungKinhDoanh.getTotalElements() + ')'}"></span></button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="alltab" role="tabpanel">
+              <div class="box-product">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                    <tr class="text-center">
+                      <th scope="col">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </th>
+                      <th scope="col">Hình ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Danh mục</th>
+                      <th scope="col">Thương hiệu</th>
+                      <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                    <th:block th:if="${pageInfo.getContent() != null && pageInfo.getContent().size() > 0}"
+                            th:each="product : ${pageInfo.getContent()}">
+                      <tr class="">
+                        <td scope="row">
+                          <input class="form-check-input" type="checkbox" value="">
+                        </td>
+                        <td class="col-1">
+                          <img style="width: 80px; height: 80px;"
+                               th:if="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="@{/img/no-image.png}">
+                          <img style="width: 80px; height: 80px;"
+                               th:unless="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="${product.productPhotos.get(0).thumbNailPhoto}">
+                        </td>
+                        <td class="col-4">
+                          <a th:href="${'/admin/product-manager/view?productId=' + product.id}" th:text="${product.name}"></a>
+                        </td>
+                        <td class="col-1 text-end">
+                          <span class="text-secondary" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                        <td class="col-3 text-center">
+                          <th:block th:if="${product.productCategories != null && product.productCategories.size() > 0}"
+                                    th:each="category : ${product.productCategories}">
+                            <button class="btn btn-sm btn-secondary p-1" th:text="${category.name}"></button>
+                          </th:block>
+                        </td>
+                        <td class="col-1 text-center">
+                          <a th:text="${product.brand.name}"></a>
+                        </td>
+                        <td class="col-2 text-center">
+                          <a class="btn btn-sm btn-warning mx-1"
+                             th:href="${'/admin/product-manager/view?productId=' + product.id}">
+                            <i class="fas fa-edit text-white"></i>
+                          </a>
+                          <button class="btn btn-sm btn-danger mx-1 btnDelete"
+                                  data-bs-toggle="modal" data-bs-target="#removeConfirmModal"
+                                  th:product-id="${product.id}">
+                            <i class="fas fa-trash text-white"></i></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </th:block>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="paging text-end">
+                <a class="btn"
+                   th:class="${pageInfo.isFirst()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfo.getNumber() - 1})}">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+                <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfo.getTotalPages() - 1)}">
+                  <a th:class="${'btn btn-sm ' + (pageNumber == pageInfo.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                     th:href="@{${url}(page=${pageNumber})}"
+                     th:text="${pageNumber + 1}"
+                     class=" btn-primary">1</a>
+                </th:block>
+                <a class="btn"
+                   th:class="${pageInfo.isLast()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfo.getNumber() + 1})}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </div>
+          </div>
+          <div class="tab-pane" id="dangBanTab" role="tabpanel">
+              <div class="box-product">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                    <tr class="text-center">
+                      <th scope="col">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </th>
+                      <th scope="col">Hình ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Danh mục</th>
+                      <th scope="col">Thương hiệu</th>
+                      <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        <th:block th:if="${pageInfoDangBan != null && pageInfoDangBan.getContent() != null && pageInfoDangBan.getContent().size() > 0}"
+                                th:each="product : ${pageInfoDangBan.getContent()}">
+                      <tr class="">
+                        <td scope="row">
+                          <input class="form-check-input" type="checkbox" value="">
+                        </td>
+                        <td class="col-1">
+                          <img style="width: 80px; height: 80px;"
+                               th:if="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="@{/img/no-image.png}">
+                          <img style="width: 80px; height: 80px;"
+                               th:unless="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="${product.productPhotos.get(0).thumbNailPhoto}">
+                        </td>
+                        <td class="col-4">
+                          <a th:href="${'/admin/product-manager/view?productId=' + product.id}" th:text="${product.name}"></a>
+                        </td>
+                        <td class="col-1 text-end">
+                          <span class="text-secondary" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                        <td class="col-3 text-center">
+                          <th:block th:if="${product.productCategories != null && product.productCategories.size() > 0}"
+                                    th:each="category : ${product.productCategories}">
+                            <button class="btn btn-sm btn-secondary p-1" th:text="${category.name}"></button>
+                          </th:block>
+                        </td>
+                        <td class="col-1 text-center">
+                          <a th:text="${product.brand.name}"></a>
+                        </td>
+                        <td class="col-2 text-center">
+                          <a class="btn btn-sm btn-warning mx-1"
+                             th:href="${'/admin/product-manager/view?productId=' + product.id}">
+                            <i class="fas fa-edit text-white"></i>
+                          </a>
+                          <button class="btn btn-sm btn-danger mx-1 btnDelete"
+                                  data-bs-toggle="modal" data-bs-target="#removeConfirmModal"
+                                  th:product-id="${product.id}">
+                            <i class="fas fa-trash text-white"></i></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </th:block>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="paging text-end">
+                <a class="btn"
+                   th:class="${pageInfoDangBan.isFirst()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoDangBan.getNumber() - 1})}">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+                <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDangBan.getTotalPages() - 1)}">
+                  <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDangBan.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                     th:href="@{${url}(page=${pageNumber})}"
+                     th:text="${pageNumber + 1}"
+                     class=" btn-primary">1</a>
+                </th:block>
+                <a class="btn"
+                   th:class="${pageInfoDangBan.isLast()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoDangBan.getNumber() + 1})}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </div>
+          </div>
+          <div class="tab-pane" id="daAnTab" role="tabpanel">
+              <div class="box-product">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                    <tr class="text-center">
+                      <th scope="col">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </th>
+                      <th scope="col">Hình ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Danh mục</th>
+                      <th scope="col">Thương hiệu</th>
+                      <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                    <th:block th:if="${pageInfoDaAn.getContent() != null && pageInfoDaAn.getContent().size() > 0}"
+                            th:each="product : ${pageInfoDaAn.getContent()}">
+                      <tr class="">
+                        <td scope="row">
+                          <input class="form-check-input" type="checkbox" value="">
+                        </td>
+                        <td class="col-1">
+                          <img style="width: 80px; height: 80px;"
+                               th:if="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="@{/img/no-image.png}">
+                          <img style="width: 80px; height: 80px;"
+                               th:unless="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="${product.productPhotos.get(0).thumbNailPhoto}">
+                        </td>
+                        <td class="col-4">
+                          <a th:href="${'/admin/product-manager/view?productId=' + product.id}" th:text="${product.name}"></a>
+                        </td>
+                        <td class="col-1 text-end">
+                          <span class="text-secondary" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                        <td class="col-3 text-center">
+                          <th:block th:if="${product.productCategories != null && product.productCategories.size() > 0}"
+                                    th:each="category : ${product.productCategories}">
+                            <button class="btn btn-sm btn-secondary p-1" th:text="${category.name}"></button>
+                          </th:block>
+                        </td>
+                        <td class="col-1 text-center">
+                          <a th:text="${product.brand.name}"></a>
+                        </td>
+                        <td class="col-2 text-center">
+                          <a class="btn btn-sm btn-warning mx-1"
+                             th:href="${'/admin/product-manager/view?productId=' + product.id}">
+                            <i class="fas fa-edit text-white"></i>
+                          </a>
+                          <button class="btn btn-sm btn-danger mx-1 btnDelete"
+                                  data-bs-toggle="modal" data-bs-target="#removeConfirmModal"
+                                  th:product-id="${product.id}">
+                            <i class="fas fa-trash text-white"></i></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </th:block>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="paging text-end">
+                <a class="btn"
+                   th:class="${pageInfoDaAn.isFirst()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoDaAn.getNumber() - 1})}">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+                <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDaAn.getTotalPages() - 1)}">
+                  <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDaAn.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                     th:href="@{${url}(page=${pageNumber})}"
+                     th:text="${pageNumber + 1}"
+                     class=" btn-primary">1</a>
+                </th:block>
+                <a class="btn"
+                   th:class="${pageInfoDaAn.isLast()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoDaAn.getNumber() + 1})}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </div>
+          </div>
+          <div class="tab-pane" id="ngungKinhDoanhTab" role="tabpanel">
+              <div class="box-product">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                    <tr class="text-center">
+                      <th scope="col">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </th>
+                      <th scope="col">Hình ảnh</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Giá bán</th>
+                      <th scope="col">Danh mục</th>
+                      <th scope="col">Thương hiệu</th>
+                      <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                    <th:block th:if="${pageInfoNgungKinhDoanh.getContent() != null && pageInfoNgungKinhDoanh.getContent().size() > 0}"
+                            th:each="product : ${pageInfoNgungKinhDoanh.getContent()}">
+                      <tr class="">
+                        <td scope="row">
+                          <input class="form-check-input" type="checkbox" value="">
+                        </td>
+                        <td class="col-1">
+                          <img style="width: 80px; height: 80px;"
+                               th:if="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="@{/img/no-image.png}">
+                          <img style="width: 80px; height: 80px;"
+                               th:unless="${product.productPhotos == null || product.productPhotos.size() == 0}"
+                               th:src="${product.productPhotos.get(0).thumbNailPhoto}">
+                        </td>
+                        <td class="col-4">
+                          <a th:href="${'/admin/product-manager/view?productId=' + product.id}" th:text="${product.name}"></a>
+                        </td>
+                        <td class="col-1 text-end">
+                          <span class="text-secondary" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                        <td class="col-3 text-center">
+                          <th:block th:if="${product.productCategories != null && product.productCategories.size() > 0}"
+                                    th:each="category : ${product.productCategories}">
+                            <button class="btn btn-sm btn-secondary p-1" th:text="${category.name}"></button>
+                          </th:block>
+                        </td>
+                        <td class="col-1 text-center">
+                          <a th:text="${product.brand.name}"></a>
+                        </td>
+                        <td class="col-2 text-center">
+                          <a class="btn btn-sm btn-warning mx-1"
+                             th:href="${'/admin/product-manager/view?productId=' + product.id}">
+                            <i class="fas fa-edit text-white"></i>
+                          </a>
+                          <button class="btn btn-sm btn-danger mx-1 btnDelete"
+                                  data-bs-toggle="modal" data-bs-target="#removeConfirmModal"
+                                  th:product-id="${product.id}">
+                            <i class="fas fa-trash text-white"></i></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </th:block>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="paging text-end">
+                <a class="btn"
+                   th:class="${pageInfoNgungKinhDoanh.isFirst()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoNgungKinhDoanh.getNumber() - 1})}">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+                <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoNgungKinhDoanh.getTotalPages() - 1)}">
+                  <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoNgungKinhDoanh.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                     th:href="@{${url}(page=${pageNumber})}"
+                     th:text="${pageNumber + 1}"
+                     class=" btn-primary">1</a>
+                </th:block>
+                <a class="btn"
+                   th:class="${pageInfoNgungKinhDoanh.isLast()} ? disabled : ''"
+                   th:href="@{${url}(page=${pageInfoNgungKinhDoanh.getNumber() + 1})}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="admin/fragments/admin-footer :: admin-footer"></div>
+
+  <div th:replace="fragments/notification :: notification"></div>
+
+</div>
+
+<div class="modal fade" id="removeConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+        <button type="button" class="btn btn-primary" id="btnSubmitRemove">Có</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
+<script th:src="@{/admin/js/product-manager.js}"></script>
+
+</body>
+</html>

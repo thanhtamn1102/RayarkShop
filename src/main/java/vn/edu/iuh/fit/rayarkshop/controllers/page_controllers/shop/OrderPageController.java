@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.ProductReview;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
 import vn.edu.iuh.fit.rayarkshop.models.requests.ProductReviewRequest;
@@ -28,6 +29,10 @@ public class OrderPageController {
     @GetMapping("")
     public ModelAndView orderPage(@RequestParam long salesOrderId) {
         SalesOrder salesOrder = salesOrderService.findById(salesOrderId);
+
+        if(salesOrder == null)
+            throw new NotFoundException("Not Found Exception");
+
         List<ProductReview> productReviews = new ArrayList<>();
 
         if(salesOrder != null) {

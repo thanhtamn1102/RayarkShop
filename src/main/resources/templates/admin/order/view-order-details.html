@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý sản phẩm - Rayark</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/notification.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/view-order-details.css}">
+</head>
+
+<body>
+<div class="wrapper container-fluid p-0">
+  <input hidden id="sales-order-id" th:value="${salesOrder.id}">
+
+  <div th:replace="admin/fragments/admin-header :: admin-header"></div>
+
+  <div class="main px-5 py-3">
+    <div class="row">
+      <div class="col-2 py-3">
+        <div class="row">
+          <div class="col-12">
+            <div th:replace="admin/fragments/admin-left-nav :: admin-left-nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 p-5 bg-white rounded">
+        <div class="row mb-3">
+          <div class="col-6">
+            <h3>Đơn hàng <span th:text="${'#' + salesOrder.id}"></span></h3>
+            <h6>Mã khách hàng: <a href="" th:text="${salesOrder.customer.id}"></a></h6>
+          </div>
+          <div class="col-6 text-end">
+            <a class="btn btn-outline-secondary" href="/admin/order-manager">Thoát</a>
+          </div>
+        </div>
+
+        <div class="box-order-details row">
+          <div class="col-md-8 col-sm-1">
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                <tr class="text-center">
+                  <th scope="col"></th>
+                  <th scope="col">Tên sản phẩm</th>
+                  <th scope="col">Option</th>
+                  <th scope="col">Đơn giá</th>
+                  <th scope="col">Số lượng</th>
+                  <th scope="col">Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody class="align-middle">
+                    <th:block th:each="orderDetail : ${salesOrder.salesOrderDetails}">
+                        <tr>
+                        <td class="col-1 text-center py-2">
+                          <img class="rounded border" style="width: 50px; height: 50px;"
+                               th:if="${orderDetail.product.productPhotos == null || orderDetail.product.productPhotos.size() == 0}"
+                               th:src="@{/img/no-image.png}" alt="">
+                          <img class="rounded border" style="width: 50px; height: 50px;"
+                               th:unless="${orderDetail.product.productPhotos == null || orderDetail.product.productPhotos.size() == 0}"
+                               th:src="${orderDetail.product.productPhotos.get(0).thumbNailPhoto}" alt="">
+                        </td>
+                        <td class="col-4">
+                          <span><a th:href="${'/admin/product-manager/view?productId=' + orderDetail.product.id}" th:text="${orderDetail.product.name}"></a></span>
+                        </td>
+                        <td class="col-2 py-2">
+                          <div th:if="${orderDetail.productVariation != null && orderDetail.productVariation.productVariationProductOptionValues != null && orderDetail.productVariation.productVariationProductOptionValues.size() > 0}">
+                            <th:block th:each="option : ${orderDetail.productVariation.productVariationProductOptionValues}">
+                              <span th:text="${option.productOption.name + ': ' + option.productOptionValue.value + ' '}"></span>
+                            </th:block>
+                          </div>
+                        </td>
+                        <td class="col-2 text-end">
+                          <span th:text="${#numbers.formatDecimal(orderDetail.unitPrice, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                        <td class="col-1 text-end">
+                          <span th:text="${orderDetail.quantity}"></span>
+                        </td>
+                        <td class="col-2 text-end">
+                          <span th:text="${#numbers.formatDecimal(orderDetail.lineTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                        </td>
+                      </tr>
+                    </th:block>
+
+                <tr>
+                  <td class="col-1 py-3" colspan="5">
+                    <h6 class="m-0 p-0">Tổng giá trị sản phẩm</h6>
+                  </td>
+                  <td class="col-2 text-end">
+                    <h6 class="m-0 p-0" th:text="${#numbers.formatDecimal(salesOrder.subTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></h6>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-6">
+                <h5>Thông tin đặt hàng</h5>
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="fas fa-signature"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Khách hàng</label>
+                    <p><a class="text-primary" th:text="${salesOrder.customer.person.firstName}"></a></p>
+                  </div>
+                </div>
+<!--                <div class="row">-->
+<!--                  <div class="col-1 text-end">-->
+<!--                    <i class="far fa-user"></i>-->
+<!--                  </div>-->
+<!--                  <div class="col-11">-->
+<!--                    <label>Username</label>-->
+<!--                    <p><a class="text-primary"></a></p>-->
+<!--                  </div>-->
+<!--                </div>-->
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="far fa-envelope"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Email</label>
+                    <p><a class="text-primary" th:text="${salesOrder.customer.person.email}"></a></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="fab fa-paypal"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Hình thức thanh toán</label>
+                    <p><a class="text-primary">Thanh toán khi nhận hàng</a></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <h5>Thông tin giao hàng</h5>
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="far fa-user"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Họ tên người nhận</label>
+                    <p class="text-primary" th:text="${salesOrder.shippingAddress.nameOfConsignee}"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="fas fa-phone-alt"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Số điện thoại</label>
+                    <p class="text-primary" th:text="${salesOrder.shippingAddress.phone}"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-1 text-end">
+                    <i class="fas fa-home"></i>
+                  </div>
+                  <div class="col-11">
+                    <label>Địa chỉ</label>
+                    <p class="text-primary" th:text="${salesOrder.shippingAddress.address + ', ' + salesOrder.shippingAddress.wardName + ', ' + salesOrder.shippingAddress.districtName + ', ' + salesOrder.shippingAddress.provinceName}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <label>Ghi chú</label>
+                <textarea cols="30" rows="4" class="form-control" placeholder="Không có ghi chú cho đơn hàng này"
+                          th:text="${salesOrder.comment}"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-1">
+            <div class="row rounded bg-light p-3 mb-3">
+              <div class="col">
+                <h4 class="mb-3">Summary</h4>
+                <div class="row mb-3">
+                  <div class="col-8">
+                    <span>Tổng giá trị hàng hóa:</span>
+                  </div>
+                  <div class="col-4 text-end">
+                    <span th:text="${#numbers.formatDecimal(salesOrder.subTotal, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-8">
+                    <span>Giảm giá:</span>
+                  </div>
+                  <div class="col-4 text-end">
+                    <span class="text-danger" th:text="${#numbers.formatDecimal(0, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-8">
+                    <span>Phí vận chuyển:</span>
+                  </div>
+                  <div class="col-4 text-end">
+                    <span th:text="${#numbers.formatDecimal(0, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12">
+                    <div class="line"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-8">
+                    <h5>Tổng thanh toán:</h5>
+                  </div>
+                  <div class="col-4 text-end">
+                    <h5 th:text="${#numbers.formatDecimal(salesOrder.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row rounded bg-light p-3 mb-3">
+              <div class="col">
+                <h4 class="mb-3">Trạng thái đơn hàng</h4>
+                <div class="mb-3">
+                  <label class="form-label">Trạng thái đơn hàng</label>
+                  <select class="form-select" id="orderStatusFormSelect">
+                    <option value="0" th:selected="${salesOrder.status.ordinal() == 0}">Chờ xác nhận</option>
+                    <option value="1" th:selected="${salesOrder.status.ordinal() == 1}">Đang xử lý</option>
+                    <option value="2" th:selected="${salesOrder.status.ordinal() == 2}">Đang giao</option>
+                    <option value="3" th:selected="${salesOrder.status.ordinal() == 3}">Đã giao</option>
+                    <option value="4" th:selected="${salesOrder.status.ordinal() == 4}">Đã hoàn thành</option>
+                    <option value="5" th:selected="${salesOrder.status.ordinal() == 5}">Đã hủy</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="admin/fragments/admin-footer :: admin-footer"></div>
+
+  <div th:replace="fragments/notification :: notification"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
+<script th:src="@{/admin/js/view-order-details.js}"></script>
+
+</body>
+
+</html>

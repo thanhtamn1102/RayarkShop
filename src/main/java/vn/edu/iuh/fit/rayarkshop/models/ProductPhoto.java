@@ -38,4 +38,12 @@ public class ProductPhoto {
     @Column(name = "large_photo", columnDefinition = "text")
     private String largePhoto;
 
+    public ProductPhoto(Product product, ProductVariation productVariation, String thumbNailPhotoFileName, String thumbNailPhoto, String largePhotoFileName, String largePhoto) {
+        this.product = product;
+        this.productVariation = productVariation;
+        this.thumbNailPhotoFileName = thumbNailPhotoFileName;
+        this.thumbNailPhoto = thumbNailPhoto;
+        this.largePhotoFileName = largePhotoFileName;
+        this.largePhoto = largePhoto;
+    }
 }

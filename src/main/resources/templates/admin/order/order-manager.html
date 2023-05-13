@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý sản phẩm - Rayark</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/notification.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/order-manager.css}">
+
+</head>
+
+<body>
+<div class="wrapper container-fluid p-0">
+  <div th:replace="admin/fragments/admin-header :: admin-header"></div>
+
+  <div class="main px-5 py-3">
+    <div class="row">
+      <div class="col-2 py-3">
+        <div class="row">
+          <div class="col-12">
+            <div th:replace="admin/fragments/admin-left-nav :: admin-left-nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 p-5 bg-white rounded">
+        <h3>Quản lý đơn hàng</h3>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabAll" type="button" role="tab" aria-controls="home" aria-selected="true">
+              All <span th:if="${pageInfo != null}" th:text="${'(' + pageInfo.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabChoXacNhan" type="button" role="tab" aria-controls="profile" aria-selected="false">
+              Chờ xác nhận <span th:if="${pageInfoChoXacNhan != null}" th:text="${'(' + pageInfoChoXacNhan.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDangXuLy" type="button" role="tab" aria-controls="messages" aria-selected="false">
+              Đang xử lý <span th:if="${pageInfoDangXuLy != null}" th:text="${'(' + pageInfoDangXuLy.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDangGiao" type="button" role="tab" aria-controls="messages" aria-selected="false">
+              Đang giao <span th:if="${pageInfoDangGiao != null}" th:text="${'(' + pageInfoDangGiao.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDaGiao" type="button" role="tab" aria-controls="messages" aria-selected="false">
+              Đã giao <span th:if="${pageInfoDaGiao != null}" th:text="${'(' + pageInfoDaGiao.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDaHoanThanh" type="button" role="tab" aria-controls="messages" aria-selected="false">
+              Đã hoàn thành <span th:if="${pageInfoDaHoanThanh != null}" th:text="${'(' + pageInfoDaHoanThanh.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDaHuy" type="button" role="tab" aria-controls="messages" aria-selected="false">
+              Đã hủy <span th:if="${pageInfoDaHuy != null}" th:text="${'(' + pageInfoDaHuy.getTotalElements() + ')'}"></span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="tabAll" role="tabpanel" aria-labelledby="home-tab">
+            <div class="row">
+              <div class="col">
+                <form action="" method="get" class="my-3">
+                  <input type="text" name="" class="form-control" placeholder="Nhập mã đơn hàng hoặc tên sản phẩm để tìm kiếm">
+                </form>
+              </div>
+            </div>
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                      <th:block th:if="${pageInfo != null && pageInfo.getContent() != null && pageInfo.getContent().size() > 0}"
+                                th:each="order :  ${pageInfo.getContent()}">
+                          <tr>
+                          <td scope="row">
+                            <input class="form-check-input" type="checkbox" value="">
+                          </td>
+                          <td class="col-1">
+                            <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                          </td>
+                          <td class="col-2 text-end">
+                            <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                          </td>
+                          <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                            <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                          </td>
+                          <td class="col-2 text-center">
+                            <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                          </td>
+                          <td class="col-2 text-center">
+                            <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                          </td>
+                          <td class="col-2 text-end">
+                            <span th:text="${order.orderDate.toString()}"></span>
+                          </td>
+                        </tr>
+                      </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfo.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfo.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfo.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfo.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfo.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfo.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabChoXacNhan" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoChoXacNhan != null && pageInfoChoXacNhan.getContent() != null && pageInfoChoXacNhan.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoChoXacNhan.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoChoXacNhan.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoChoXacNhan.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoChoXacNhan.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoChoXacNhan.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoChoXacNhan.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoChoXacNhan.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabDangXuLy" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoDangXuLy != null && pageInfoDangXuLy.getContent() != null && pageInfoDangXuLy.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoDangXuLy.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoDangXuLy.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDangXuLy.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDangXuLy.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDangXuLy.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoDangXuLy.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDangXuLy.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabDangGiao" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoDangGiao != null && pageInfoDangGiao.getContent() != null && pageInfoDangGiao.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoDangGiao.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoDangGiao.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDangGiao.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDangGiao.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDangGiao.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoDangGiao.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDangGiao.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabDaGiao" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoDaGiao != null && pageInfoDaGiao.getContent() != null && pageInfoDaGiao.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoDaGiao.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoDaGiao.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaGiao.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDaGiao.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDaGiao.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoDaGiao.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaGiao.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabDaHoanThanh" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoDaHoanThanh != null && pageInfoDaHoanThanh.getContent() != null && pageInfoDaHoanThanh.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoDaHoanThanh.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoDaHoanThanh.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaHoanThanh.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDaHoanThanh.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDaHoanThanh.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoDaHoanThanh.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaHoanThanh.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane" id="tabDaHuy" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="box-order">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                  <tr class="text-center">
+                    <th scope="col">
+                      <input class="form-check-input" type="checkbox" value="">
+                    </th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tổng thanh toán</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Ngày tạo đơn hàng</th>
+                  </tr>
+                  </thead>
+                  <tbody class="align-middle">
+                  <th:block th:if="${pageInfoDaHuy != null && pageInfoDaHuy.getContent() != null && pageInfoDaHuy.getContent().size() > 0}"
+                            th:each="order :  ${pageInfoDaHuy.getContent()}">
+                    <tr>
+                      <td scope="row">
+                        <input class="form-check-input" type="checkbox" value="">
+                      </td>
+                      <td class="col-1">
+                        <a th:href="${'/admin/order-manager/view?id=' + order.id}" th:text="${'#' + order.id}"></a>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${#numbers.formatDecimal(order.totalDue, 0, 'COMMA', 0, 'POINT') +' đ'}"></span>
+                      </td>
+                      <td class="col-3 py-2">
+                            <span>
+                                <img style="width: 35px; height: 35px;" class="rounded-circle border"
+                                     th:src="@{/img/icon-user.jpg}" alt="">
+                            </span>
+                        <a class="ms-1" th:text="${order.customer.person.firstName}"></a>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-success p-1 py-0" th:text="${order.status.toString()}"></button>
+                      </td>
+                      <td class="col-2 text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 py-0">Thanh toán khi nhận hàng</button>
+                      </td>
+                      <td class="col-2 text-end">
+                        <span th:text="${order.orderDate.toString()}"></span>
+                      </td>
+                    </tr>
+                  </th:block>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="paging text-end">
+              <a class="btn"
+                 th:class="${pageInfoDaHuy.isFirst()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaHuy.getNumber() - 1})}">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+              <th:block th:each="pageNumber : ${#numbers.sequence(0, pageInfoDaHuy.getTotalPages() - 1)}">
+                <a th:class="${'btn btn-sm ' + (pageNumber == pageInfoDaHuy.getNumber() ? 'btn-primary' : 'btn-outline-primary')}"
+                   th:href="@{${url}(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"
+                   class=" btn-primary">1</a>
+              </th:block>
+              <a class="btn"
+                 th:class="${pageInfoDaHuy.isLast()} ? disabled : ''"
+                 th:href="@{${url}(page=${pageInfoDaHuy.getNumber() + 1})}">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="admin/fragments/admin-footer :: admin-footer"></div>
+
+  <div th:replace="fragments/notification :: notification"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
+<script th:src="@{/admin/js/order-manager.js}"></script>
+
+</body>
+</html>

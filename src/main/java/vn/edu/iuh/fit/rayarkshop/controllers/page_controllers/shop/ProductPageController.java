@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.*;
 
@@ -149,22 +150,24 @@ public class ProductPageController {
         }
 
         Product product = productService.findById(Integer.parseInt(id));
+
+        if(product == null)
+            throw new NotFoundException("Not Found Exception");
+
         List<Product> productFromCategory = new ArrayList<>();
         List<ProductReview> productReviews = new ArrayList<>();
 
-        if(product != null) {
-            for (ProductCategory productCategory : product.getProductCategories()) {
-                Page<Product> pageProductsFormCategory = productService.searchProduct(productCategory, PageRequest.of(0, 12));
-                while(pageProductsFormCategory.hasNext() && productFromCategory.size() < 12) {
-                    pageProductsFormCategory.nextPageable();
-                    productFromCategory.addAll(pageProductsFormCategory.getContent());
-                }
-                if(productFromCategory.size() >= 10)
-                    break;
+        for (ProductCategory productCategory : product.getProductCategories()) {
+            Page<Product> pageProductsFormCategory = productService.searchProduct(productCategory, PageRequest.of(0, 12));
+            while(pageProductsFormCategory.hasNext() && productFromCategory.size() < 12) {
+                pageProductsFormCategory.nextPageable();
+                productFromCategory.addAll(pageProductsFormCategory.getContent());
             }
-
-            productReviews = productReviewService.findProductReviewsByProductId(product.getId());
+            if(productFromCategory.size() >= 10)
+                break;
         }
+
+        productReviews = productReviewService.findProductReviewsByProductId(product.getId());
 
         ModelAndView modelAndView = new ModelAndView();
 

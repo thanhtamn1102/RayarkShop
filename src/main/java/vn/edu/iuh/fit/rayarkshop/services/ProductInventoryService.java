@@ -9,4 +9,6 @@ public interface ProductInventoryService {
 
     ProductInventory findByProductIdAndProductVariation(int productId, ProductVariation productVariation);
 
+    ProductInventory save(ProductInventory productInventory);
+
 }

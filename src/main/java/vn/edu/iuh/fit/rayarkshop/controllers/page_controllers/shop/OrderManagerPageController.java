@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.OrderStatus;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
@@ -34,6 +35,10 @@ public class OrderManagerPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
+
         int customerId = account.getPerson().getId();
 
         List<SalesOrder> salesOrders = salesOrderService.findAllByCustomerId(customerId);
@@ -90,6 +95,10 @@ public class OrderManagerPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
+
         int customerId = account.getPerson().getId();
 
         long orderId = -1;

@@ -5,6 +5,7 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.StorageClient;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.iuh.fit.rayarkshop.services.FirebaseStorageService;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +50,12 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public String uploadFile(MultipartFile file, String fileName) throws IOException {
+        InputStream inputStream = new BufferedInputStream(file.getInputStream());
+        return uploadFile(inputStream, fileName);
     }
 
     public String uploadFile(InputStream inputStream, String fileName) throws IOException {

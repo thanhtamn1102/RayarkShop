@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.CustomerService;
@@ -39,6 +40,10 @@ public class AddressManagerPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
+
         int customerId = account.getPerson().getId();
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
@@ -55,7 +60,11 @@ public class AddressManagerPageController {
     @PostMapping("/remove")
     public ModelAndView removeAddress(@RequestParam(defaultValue = "1") int customerId,
                                 @RequestParam int shippingAddressId) {
-        shippingAddressService.removeById(shippingAddressId);
+        int i = shippingAddressService.removeById(shippingAddressId);
+
+        if(i == 0)
+            throw new RuntimeException("Runtime Exception");
+
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
 
         ModelAndView modelAndView = new ModelAndView();
@@ -78,6 +87,10 @@ public class AddressManagerPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
+
         int customerId = account.getPerson().getId();
 
         Customer customer = customerService.getById(customerId);
@@ -99,9 +112,12 @@ public class AddressManagerPageController {
                     address
             );
 
-            shippingAddressService.saveShippingAddress(shippingAddress);
+            ShippingAddress saved = shippingAddressService.saveShippingAddress(shippingAddress);
+
+            if(saved == null)
+                throw new RuntimeException("Runtime Exception");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException("Runtime Exception");
         }
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);

@@ -32,6 +32,9 @@ public class LoginPageController {
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
 
+        if(account == null)
+            throw new RuntimeException("Account Not Found");
+
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.addObject("account", account);

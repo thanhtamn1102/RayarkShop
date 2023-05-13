@@ -11,6 +11,8 @@ import java.io.InputStream;
 @Service
 public interface FirebaseStorageService {
 
+    String uploadFile(MultipartFile file, String fileName) throws IOException;
+
     String uploadFile(InputStream inputStream, String fileName) throws IOException;
 
     String getFileURL(String fileName, String token) throws FirebaseAuthException;

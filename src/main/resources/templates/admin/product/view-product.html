@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý sản phẩm - Rayark</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/notification.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/view-product.css}">
+</head>
+<body>
+<div class="wrapper container-fluid p-0">
+  <div th:replace="admin/fragments/admin-header :: admin-header"></div>
+
+  <div class="main px-5 py-3">
+    <div class="row">
+      <div class="col-2 py-3">
+        <div class="row">
+          <div class="col-12">
+            <div th:replace="admin/fragments/admin-left-nav :: admin-left-nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 p-5 bg-white rounded">
+        <div class="row">
+          <div class="col-6">
+            <h3>Sản phẩm</h3>
+          </div>
+          <div class="col-6 text-end">
+            <a type="button" class="btn btn-outline-secondary mx-1"
+                href="/admin/product-manager">Thoát</a>
+            <button type="button" class="btn btn-primary mx-1" id="btnSave" th:product-id="${product.id}">Lưu sản phẩm</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-sm-12 p-3">
+            <h5 class="mb-3">Thông tin sản phẩm</h5>
+            <div class="my-3">
+              <label for="txtProductName" class="form-label">Tên sản phẩm</label>
+              <input type="text" id="txtProductName" name="name" class="form-control" placeholder="Nhập tên sản phẩm" aria-describedby="productNameNotification"
+                      th:value="${product.name}">
+              <small id="productNameNotification" class="form-text text-danger"></small>
+            </div>
+            <div class="mb-3">
+              <label for="txtDescription" class="form-label">Mô tả</label>
+              <textarea class="form-control" name="" id="txtDescription" cols="30" rows="4" placeholder="Nhập mô tả cho sản phẩm"
+                        th:text="${product.description}"></textarea>
+              <small id="descriptionNotification" class="form-text text-danger"></small>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="txtImportPrice" class="form-label">Giá nhập</label>
+                <input id="txtImportPrice" type="number" class="form-control" placeholder="Giá nhập" aria-label="Giá nhập"
+                        th:value="${product.importPrice}">
+                <small id="importPriceNotification" class="form-text text-danger"></small>
+              </div>
+              <div class="col">
+                <label for="txtQuantity" class="form-label">Số lượng</label>
+                <input id="txtQuantity" type="number" class="form-control" placeholder="Số lượng" aria-label="Số lượng"
+                        th:value="${inventory.quantity}">
+                <small id="quantityNotification" class="form-text text-danger"></small>
+              </div>
+              <div class="col">
+                <label for="txtSku" class="form-label">Sku</label>
+                <input type="text" name="" id="txtSku" class="form-control" placeholder="Nhập mã phân loại" aria-describedby="skuNotification"
+                        th:value="${product.sku}">
+                <small id="skuNotification" class="form-text text-danger"></small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-6 align-self-center">
+                  <label>Hình ảnh sản phẩm</label>
+                </div>
+                <div class="col-6 text-end">
+                  <input hidden type="file" name="file" id="inputFile">
+                  <button class="btn btn-sm btn-outline-primary mb-2" id="btnUploadImage">Tải lên hình ảnh</button>
+                </div>
+              </div>
+              <div class="rounded border p-2" id="product-photo-box">
+                  <th:block th:each="productPhoto : ${product.productPhotos}">
+                      <div class="image-container">
+                          <img th:src="${productPhoto.thumbNailPhoto}"
+                               class="img-thumbnail rounded">
+                          <button class="remove-button btn btn-secondary" th:product-photo-id="${productPhoto.id}">Remove</button>
+                      </div>
+                  </th:block>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="row rounded bg-light p-3 mb-3">
+              <div class="col">
+                <h5 class="mb-3">Organize</h5>
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col">
+                      <label for="categoryFormSelect" class="form-label">Danh mục</label>
+                    </div>
+                    <div class="col text-end">
+                      <a href="" class="fst-italic"><u>Thêm danh mục</u></a>
+                    </div>
+                  </div>
+                  <select class="form-select form-select" name="category" id="categoryFormSelect">
+                    <option value="0" selected>Select one</option>
+                    <th:block th:each="category : ${categories}">
+                        <option th:value="${category.id}" th:text="${category.name}"
+                                th:selected="${product.productCategories.contains(category)}"></option>
+                    </th:block>
+                  </select>
+                  <small id="categoryNotification" class="form-text text-danger"></small>
+                  <div class="pt-2" id="categories-selected-box">
+                      <th:block th:each="category : ${product.productCategories}">
+                          <button class="btn-category-selected btn btn-sm btn-outline-warning me-1"
+                              th:category-id="${category.id}">
+                              <span th:text="${category.name}"></span>
+                              <i class="fas fa-times ms-1"></i>
+                          </button>
+                      </th:block>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="row">
+                    <div class="col">
+                      <label for="brandFormSelect" class="form-label">Thương hiệu</label>
+                    </div>
+                    <div class="col text-end">
+                      <a href="" class="fst-italic"><u>Thêm thương hiệu</u></a>
+                    </div>
+                  </div>
+                  <select class="form-select form-select" name="brand" id="brandFormSelect">
+                    <option value="0" selected>Select one</option>
+                    <th:block th:each="brand : ${brands}">
+                        <option th:value="${brand.id}" th:text="${brand.name}"
+                                th:selected="${product.brand.equals(brand)}"></option>
+                    </th:block>
+                  </select>
+                  <small id="brandNotification" class="form-text text-danger"></small>
+                </div>
+                <div class="mb-3">
+                  <label for="statusFormSelect" class="form-label">Trạng thái</label>
+                  <select class="form-select form-select" name="status" id="statusFormSelect">
+                    <option value="0" th:selected="${product.productStatus.ordinal() == 0}">Đang bán</option>
+                    <option value="1" th:selected="${product.productStatus.ordinal() == 1}">Đã ẩn</option>
+                    <option value="2" th:selected="${product.productStatus.ordinal() == 2}">Ngừng kinh doanh</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row rounded bg-light p-3">
+                <div class="col">
+                    <h5>Biến thể</h5>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Option 1</label>
+                        <select class="form-select form-select" name="" id="">
+                            <option selected>Select one</option>
+                            <option value="">New Delhi</option>
+                            <option value="">Istanbul</option>
+                            <option value="">Jakarta</option>
+                        </select>
+
+                        <div class="mb-3 p">
+                            <label for="" class="form-label">Option Value</label>
+                            <select class="form-select form-select" name="" id="">
+                                <option selected>Select one</option>
+                                <option value="">New Delhi</option>
+                                <option value="">Istanbul</option>
+                                <option value="">Jakarta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="admin/fragments/admin-footer :: admin-footer"></div>
+
+  <div th:replace="fragments/notification :: notification"></div>
+
+</div>
+
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
+<script th:src="@{/admin/js/view-product.js}"></script>
+
+</body>
+</html>

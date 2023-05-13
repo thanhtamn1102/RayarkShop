@@ -6,4 +6,7 @@ import vn.edu.iuh.fit.rayarkshop.models.ProductPhoto;
 
 @Repository
 public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long> {
+
+    int deleteProductPhotoById(long id);
+
 }

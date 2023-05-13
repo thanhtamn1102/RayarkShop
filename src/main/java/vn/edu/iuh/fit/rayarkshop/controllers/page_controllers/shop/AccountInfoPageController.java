@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Person;
 import vn.edu.iuh.fit.rayarkshop.models.requests.AccountInfoUpdateRequest;
@@ -33,6 +34,9 @@ public class AccountInfoPageController {
         String username = authentication.getName();
 
         Account account = accountService.getAccountByUserNameOrEmail(username);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
 
         ModelAndView modelAndView = new ModelAndView();
 

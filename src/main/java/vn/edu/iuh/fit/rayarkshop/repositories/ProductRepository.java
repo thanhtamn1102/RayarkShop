@@ -8,11 +8,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.iuh.fit.rayarkshop.models.Product;
 import vn.edu.iuh.fit.rayarkshop.models.ProductCategory;
+import vn.edu.iuh.fit.rayarkshop.models.ProductStatus;
 
 import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
+
+    @Query("SELECT p FROM Product p WHERE p.removeDate is null order by p.createdDate desc")
+    Page<Product> findAllByRemoveDateIsNull(Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.removeDate is null and p.productStatus = ?1 order by p.createdDate desc")
+    Page<Product> findAllByProductStatus(@Param("productStatus") int productStatus, Pageable pageable);
 
     Page<Product> searchProductsByNameContainsIgnoreCase(String name, Pageable pageable);
 

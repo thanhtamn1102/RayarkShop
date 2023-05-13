@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.*;
 
@@ -40,6 +41,10 @@ public class ShoppingCartPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new RuntimeException("Account Not Found");
+
         int customerId = account.getPerson().getId();
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
@@ -61,7 +66,11 @@ public class ShoppingCartPageController {
     @PostMapping("/removeCartItem")
     public ModelAndView removeCartItem(@RequestParam(defaultValue = "1") int customerId,
                                  @RequestParam long cartItemId) {
-        shoppingCartItemService.removeById(cartItemId);
+        int i = shoppingCartItemService.removeById(cartItemId);
+
+        if(i == 0)
+            throw new NotFoundException("Cart Item Not Found");
+
         List<ShoppingCartItem> shoppingCartItems = shoppingCartItemService.getAllByCustomerId(customerId);
 
         ModelAndView modelAndView = new ModelAndView();

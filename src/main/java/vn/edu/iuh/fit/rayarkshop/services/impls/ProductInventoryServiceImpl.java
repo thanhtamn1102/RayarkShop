@@ -17,4 +17,9 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     public ProductInventory findByProductIdAndProductVariation(int productId, ProductVariation productVariation) {
         return productInventoryRepository.findByProductIdAndProductVariation(productId, productVariation);
     }
+
+    @Override
+    public ProductInventory save(ProductInventory productInventory) {
+        return productInventoryRepository.save(productInventory);
+    }
 }

@@ -1,100 +1,238 @@
-var phoenixIsRTL = window.config.config.phoenixIsRTL;
-if (phoenixIsRTL) {
-    var linkDefault = document.getElementById('style-default');
-    var userLinkDefault = document.getElementById('user-style-default');
-    linkDefault.setAttribute('disabled', true);
-    userLinkDefault.setAttribute('disabled', true);
-    document.querySelector('html').setAttribute('dir', 'rtl');
-} else {
-    var linkRTL = document.getElementById('style-rtl');
-    var userLinkRTL = document.getElementById('user-style-rtl');
-    linkRTL.setAttribute('disabled', true);
-    userLinkRTL.setAttribute('disabled', true);
-}
+$(document).ready(function() {
+    let files = [];
 
-var navbarStyle = window.config.config.phoenixNavbarStyle;
-if (navbarStyle && navbarStyle !== 'transparent') {
-    document.querySelector('body').classList.add(`navbar-${navbarStyle}`);
-}
+    let productPhotoBox = $('#product-photo-box');
 
-var navbarTopShape = window.config.config.phoenixNavbarTopShape;
-var navbarPosition = window.config.config.phoenixNavbarPosition;
-var body = document.querySelector('body');
-var navbarDefault = document.querySelector('#navbarDefault');
-var navbarTop = document.querySelector('#navbarTop');
-var topNavSlim = document.querySelector('#topNavSlim');
-var navbarTopSlim = document.querySelector('#navbarTopSlim');
-var navbarCombo = document.querySelector('#navbarCombo');
-var navbarComboSlim = document.querySelector('#navbarComboSlim');
+    let categoriesSelectedBox = $('#categories-selected-box');
+    let categoryFormSelect = $('#categoryFormSelect');
 
-var documentElement = document.documentElement;
-var navbarVertical = document.querySelector('.navbar-vertical');
+    let txtProductName = $('#txtProductName');
+    let txtSku = $('#txtSku');
+    let txtDescription = $('#txtDescription');
+    let txtImportPrice = $('#txtImportPrice');
+    let txtQuantity = $('#txtQuantity');
+    let brandFormSelect = $('#brandFormSelect');
 
-if (navbarTopShape === 'slim' && navbarPosition === 'vertical') {
-    navbarDefault.remove();
-    navbarTop.remove();
-    navbarTopSlim.remove();
-    navbarCombo.remove();
-    navbarComboSlim.remove();
-    topNavSlim.style.display = 'block';
-    navbarVertical.style.display = 'inline-block';
-    body.classList.add('nav-slim');
-} else if (navbarTopShape === 'slim' && navbarPosition === 'horizontal') {
-    navbarDefault.remove();
-    navbarVertical.remove();
-    navbarTop.remove();
-    topNavSlim.remove();
-    navbarCombo.remove();
-    navbarComboSlim.remove();
-    navbarTopSlim.removeAttribute('style');
-    body.classList.add('nav-slim');
-} else if (navbarTopShape === 'slim' && navbarPosition === 'combo') {
-    navbarDefault.remove();
-    //- navbarVertical.remove();
-    navbarTop.remove();
-    topNavSlim.remove();
-    navbarCombo.remove();
-    navbarTopSlim.remove();
-    navbarComboSlim.removeAttribute('style');
-    navbarVertical.removeAttribute('style');
-    body.classList.add('nav-slim');
-} else if (navbarTopShape === 'default' && navbarPosition === 'horizontal') {
-    navbarDefault.remove();
-    topNavSlim.remove();
-    navbarVertical.remove();
-    navbarTopSlim.remove();
-    navbarCombo.remove();
-    navbarComboSlim.remove();
-    navbarTop.removeAttribute('style');
-    documentElement.classList.add('navbar-horizontal');
-} else if (navbarTopShape === 'default' && navbarPosition === 'combo') {
-    topNavSlim.remove();
-    navbarTop.remove();
-    navbarTopSlim.remove();
-    navbarDefault.remove();
-    navbarComboSlim.remove();
-    navbarCombo.removeAttribute('style');
-    navbarVertical.removeAttribute('style');
-    documentElement.classList.add('navbar-combo')
+    let productNameNotification = $('#productNameNotification');
+    let skuNotification = $('#skuNotification');
+    let descriptionNotification = $('#descriptionNotification');
+    let importPriceNotification = $('#importPriceNotification');
+    let quantityNotification = $('#quantityNotification');
+    let categoryNotification = $('#categoryNotification');
+    let brandNotification = $('#brandNotification');
 
-} else {
-    topNavSlim.remove();
-    navbarTop.remove();
-    navbarTopSlim.remove();
-    navbarCombo.remove();
-    navbarComboSlim.remove();
-    navbarDefault.removeAttribute('style');
-    navbarVertical.removeAttribute('style');
-}
+    let inputFile = $('#inputFile');
+    let btnUploadImage = $('#btnUploadImage');
+    btnUploadImage.on('click', function () {
+        inputFile.click();
+    });
 
-var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-var navbarTop = document.querySelector('.navbar-top');
-if (navbarTopStyle === 'darker') {
-    navbarTop.classList.add('navbar-darker');
-}
+    inputFile.on('change', event => {
+        let input = $(event.target);
 
-var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-var navbarVertical = document.querySelector('.navbar-vertical');
-if (navbarVerticalStyle === 'darker') {
-    navbarVertical.classList.add('navbar-darker');
-}
+        if(files.length < 5) {
+            let fileChooses = event.target.files;
+
+            $.each(fileChooses, (i, file) => {
+                const reader = new FileReader();
+
+                if(files.indexOf(file) == -1) {
+                    files.push(file);
+
+                    reader.onload = () => {
+                        const img = $('<img>').attr('src', reader.result);
+                        const btnRemove = $('<button>').addClass('remove-button btn btn-secondary').html('Remove');
+                        const imageContainer = $('<div>').addClass('image-container').append(img).append(btnRemove);
+                        productPhotoBox.append(imageContainer);
+
+                        // Bắt sự kiện click vào icon xóa
+                        btnRemove.on('click', () => {
+                            let index = files.indexOf(file);
+                            if(index >= 0)
+                                files.splice(index, 1);
+                            imageContainer.remove();
+                        });
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        } else {
+            showMessage('Chỉ được phép tải lên tối đa 5 hình ảnh');
+        }
+    });
+
+    categoryFormSelect.on('change', function() {
+        categoryNotification.html('');
+
+        let selectedOption = $(this).children("option:selected");
+        let categorySelectedValue = selectedOption.val();
+        let categorySelectedText = selectedOption.text();
+
+        let btnCategorySelects = $('.btn-category-selected');
+        for(let i = 0; i < btnCategorySelects.length; i++) {
+            if($(btnCategorySelects[i]).attr('category-id') == categorySelectedValue)
+                return;
+        }
+
+        let btnCategorySelected = $('<button>').addClass('btn-category-selected btn btn-sm btn-outline-warning me-1')
+                                                .attr('category-id', categorySelectedValue);
+        let spanCategorySelectedName = $('<span>').html(categorySelectedText);
+        let iconRemove = $('<i>').addClass('fas fa-times ms-1');
+
+        iconRemove.on('click', function() {
+            btnCategorySelected.remove();
+        });
+
+        btnCategorySelected.append(spanCategorySelectedName).append(iconRemove);
+
+        categoriesSelectedBox.append(btnCategorySelected);
+    });
+
+    $('#btnSave').on('click', function () {
+        let productName = txtProductName.val();
+        let description = txtDescription.val();
+        let importPrice = txtImportPrice.val();
+        let quantity = txtQuantity.val();
+        let sku = txtSku.val();
+        let brand = parseInt(brandFormSelect.val());
+        let categories = [];
+
+        let btnCategoriesSelects = $('.btn-category-selected');
+        for(let i = 0; i < btnCategoriesSelects.length; i++) {
+            categories.push(parseInt($(btnCategoriesSelects[i]).attr('category-id')));
+        }
+
+        if(checkProductName(productName) && checkImportPrice(importPrice) && checkQuantity(quantity)
+            && checkCategory(categories) && checkBrand(brand)) {
+            $.ajax({
+                url: '/api/products/add',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    productName: productName,
+                    sku: sku,
+                    description: description,
+                    importPrice: importPrice,
+                    quantity: quantity,
+                    brandId: brand,
+                    categoryIds: categories
+                }),
+                success: function(data) {
+                    if(data > 0) {
+                        if(files.length > 0) {
+                            uploadProductPhoto(data, files);
+                        } else {
+                            location.href = location.origin + "/admin/product-manager";
+                        }
+                    } else {
+                        showMessage("Lỗi: Đã có lỗi xảy ra vui lòng thử lại sau!");
+                    }
+                },
+                error: function(error) {
+                    showMessage("Lỗi: Đã có lỗi xảy ra vui lòng thử lại sau!");
+                }
+            });
+        }
+    });
+
+    function uploadProductPhoto(productId, productPhotos) {
+        let formData = new FormData();
+        formData.append('productId', productId);
+
+        $.each(productPhotos, (i, file) => {
+            formData.append('files', file);
+        });
+
+        $.ajax({
+            url: '/api/products/upload-product-photos',
+            type: "PUT",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if(data) {
+                    location.href = location.origin + "/admin/product-manager";
+                }
+                else
+                    showMessage("Lỗi: Đã có lỗi xảy ra. Vui lòng thử lại sau!");
+            },
+            error: function(error) {
+                showMessage("Lỗi: Đã có lỗi xảy ra. Vui lòng thử lại sau!");
+            }
+        });
+    }
+
+    function checkProductName(productName) {
+        if(productName == "") {
+            productNameNotification.html("Không được để trống");
+            return false;
+        }
+        productNameNotification.html('');
+        return true;
+    }
+
+    function checkImportPrice(importPrice) {
+        if(importPrice == "") {
+            importPriceNotification.html("Không được để trống");
+            return false;
+        } else if(isNaN(importPrice)) {
+            importPriceNotification.html("Giá nhập phải là số");
+            return false;
+        } else if(parseFloat(importPrice) <= 0) {
+            importPriceNotification.html("Giá nhập phải > 0");
+            return false;
+        }
+        importPriceNotification.html('');
+        return true;
+    }
+
+    function checkQuantity(quantity) {
+        if(quantity == "") {
+            quantityNotification.html("Không được để trống");
+            return false;
+        } else if(isNaN(quantity)) {
+            quantityNotification.html("Số lượng phải là số");
+            return false;
+        } else if(parseFloat(quantity) <= 0) {
+            quantityNotification.html("Số lượng phải > 0");
+        }
+        quantityNotification.html('');
+        return true;
+    }
+
+    function checkCategory(categories) {
+        if(categories.length <= 0) {
+            categoryNotification.html("Sản phẩm phải thuộc it nhất một danh mục");
+            return false;
+        }
+        categoryNotification.html('');
+        return true;
+    }
+
+    function checkBrand(brand) {
+        if(brand <= 0) {
+            brandNotification.html("Sản phẩm phải thuộc một thương hiệu");
+            return false;
+        }
+        brandNotification.html("");
+        return true;
+    }
+
+    txtProductName.keyup(function () {
+        checkProductName();
+    });
+
+    txtImportPrice.keyup(function () {
+        checkImportPrice();
+    });
+
+    txtQuantity.keyup(function () {
+        checkQuantity();
+    });
+
+    brandFormSelect.on('change', function () {
+        brandNotification.html('');
+    });
+
+});

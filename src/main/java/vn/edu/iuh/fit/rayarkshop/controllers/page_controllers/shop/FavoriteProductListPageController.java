@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.FavoriteProductListItem;
 import vn.edu.iuh.fit.rayarkshop.services.AccountService;
@@ -31,6 +32,10 @@ public class FavoriteProductListPageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usernameOrEmail = authentication.getName();
         Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+
+        if(account == null)
+            throw new NotFoundException("Not Found Exception");
+
         int customerId = account.getPerson().getId();
 
         List<FavoriteProductListItem> favoriteProductListItems = favoriteProductListItemService.getByCustomer(customerId);
