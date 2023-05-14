@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.iuh.fit.rayarkshop.constants.AppRole;
 import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
 import vn.edu.iuh.fit.rayarkshop.services.*;
@@ -55,7 +57,8 @@ public class ProductPageController {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.isAuthenticated()) {
+        if(authentication.isAuthenticated() &&
+                authentication.getAuthorities().contains(new SimpleGrantedAuthority(AppRole.ANONYMOUS.getRoleName())) == false) {
             String uid = authentication.getName();
             UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
@@ -104,7 +107,7 @@ public class ProductPageController {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.isAuthenticated()) {
+        if(authentication.isAuthenticated() && authentication.getAuthorities().contains(new SimpleGrantedAuthority(AppRole.ANONYMOUS.getRoleName())) == false) {
             String uid = authentication.getName();
             UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
@@ -141,7 +144,7 @@ public class ProductPageController {
         FavoriteProductListItem favoriteProductListItem = null;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.isAuthenticated()) {
+        if(authentication.isAuthenticated() && authentication.getAuthorities().contains(new SimpleGrantedAuthority(AppRole.ANONYMOUS.getRoleName())) == false) {
             String uid = authentication.getName();
             UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
