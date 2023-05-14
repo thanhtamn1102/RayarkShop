@@ -23,9 +23,6 @@ import java.util.List;
 public class ProductReviewController {
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private CustomerService customerService;
 
     @Autowired
@@ -40,13 +37,14 @@ public class ProductReviewController {
     @Autowired
     private FirebaseStorageService firebaseStorageService;
 
+    @Autowired
+    private PersonService personService;
 
     @PostMapping("/add")
     public ResponseEntity<?> productReviews(@RequestBody ProductReviewRequest productReviewRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int customerId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int customerId = personService.findByUid(uid).getId();
 
         Customer customer = customerService.getById(customerId);
 

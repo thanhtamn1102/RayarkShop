@@ -46,14 +46,6 @@
                                     <form>
                                         <div class="row py-2">
                                             <div class="col-2 text-end align-self-center">
-                                                <label for="txtUserName">Tên tài khoản</label>
-                                            </div>
-                                            <div class="col-10">
-                                                <input type="text" class="form-control" id="txtUserName" th:value="${account.userName}" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row py-2">
-                                            <div class="col-2 text-end align-self-center">
                                                 <label for="txtFullName">Họ tên</label>
                                             </div>
                                             <div class="col-10">
@@ -66,7 +58,7 @@
                                                 <label for="txtEmail">Email</label>
                                             </div>
                                             <div class="col-10">
-                                                <input type="text" class="form-control-plaintext" id="txtEmail" th:value="${account.email}" disabled>
+                                                <input type="text" class="form-control-plaintext" id="txtEmail" th:value="${user.email}" disabled>
                                             </div>
                                         </div>
                                         <div class="row py-2">
@@ -76,7 +68,7 @@
                                             <div class="col-10">
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <input type="password" id="txtPassword" class="form-control border-0" th:value="${account.hashPass}" disabled>
+                                                        <input type="password" id="txtPassword" class="form-control border-0" disabled>
                                                     </div>
                                                     <div class="col-8 align-self-center">
                                                         <button type="button" class="btn text-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu?</button>
@@ -132,11 +124,11 @@
                                             <div class="col-12">
                                                 <input hidden type="file" name="file" id="uploadAvatarInput">
                                                 <img class="avatarImage border rounded-circle"
-                                                     th:src="${account.avatar}" style="width: 170px;"
-                                                     th:if="${account.avatar != null && account.avatar.isEmpty() == false}">
+                                                     th:src="${user.photoUrl}" style="width: 170px;"
+                                                     th:if="${user.photoUrl != null && user.photoUrl.isEmpty() == false}">
                                                 <img class="avatarImage"
                                                      th:src="@{/img/icon-user.jpg}" style="width: 170px;"
-                                                     th:unless="${account.avatar != null && account.avatar.isEmpty() == false}">
+                                                     th:unless="${user.photoUrl != null && user.photoUrl.isEmpty() == false}">
                                             </div>
                                         </div>
                                         <button type="button" class="btn btn-outline-secondary my-3" id="btnUploadImage">Upload Image</button>

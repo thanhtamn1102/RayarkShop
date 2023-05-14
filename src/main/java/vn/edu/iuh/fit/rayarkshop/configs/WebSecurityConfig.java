@@ -10,13 +10,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import vn.edu.iuh.fit.rayarkshop.securities.FirebaseAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private FirebaseAuthenticationProvider customAuthenticationProvider;
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -29,13 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "/home", "/login", "/signup", "/logout", "/api/accounts/signup/user-account").permitAll()
-                .antMatchers("/contacts", "/products", "/products/**").permitAll()
-                .antMatchers("/admin/**", "/api/products/**").access("hasAnyRole('ROLE_ADMI')")
-                .antMatchers("/login/success", "/shopping-cart", "/shopping-cart/**", "/accounts", "/accounts/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMI')")
-                .antMatchers("/sales-orders", "/sales-orders/**", "/orders", "/orders/**", "/api/favorite-product-list", "/api/favorite-product-list/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMI')")
-                .antMatchers("/api/sales-order", "/api/sales-order/**", "/api/shipping-address", "/api/shipping-address/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMI')")
-                .antMatchers("/api/shopping-cart", "/api/shopping-cart/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMI')")
+                .antMatchers("/", "/home", "/login", "/signup", "/logout", "/api/accounts/signup/user-account", "/error", "/error/**").permitAll()
+                .antMatchers("/contacts", "/products", "/products/**", "/new-login", "/new-login/**", "/new-signup", "/new-signup/**", "/new-signup-account", "/account-signup-complete").permitAll()
+                .antMatchers("/admin/**", "/api/products/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers("/login/success", "/shopping-cart", "/shopping-cart/**", "/accounts", "/accounts/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers("/sales-orders", "/sales-orders/**", "/orders", "/orders/**", "/api/favorite-product-list", "/api/favorite-product-list/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers("/api/sales-order", "/api/sales-order/**", "/api/shipping-address", "/api/shipping-address/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers("/api/shopping-cart", "/api/shopping-cart/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error/access-denied")
@@ -61,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(customAuthenticationProvider);
     }
 
 }

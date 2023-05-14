@@ -9,7 +9,6 @@ public class AccountSignupInfoRequest {
 
     private String fullName;
     private String phone;
-    private String userName;
     private String email;
     private String password;
     private String confirmPassword;

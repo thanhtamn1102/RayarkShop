@@ -56,7 +56,7 @@ public class SalesOrder {
     @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SalesOrderDetail> salesOrderDetails;
 
-    @OneToOne(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private OrderCancelDetail orderCancelDetail;
 
     public SalesOrder(Customer customer, String comment, ShippingAddress shippingAddress) {

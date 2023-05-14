@@ -147,9 +147,9 @@
                 <div class="mb-3">
                   <label for="statusFormSelect" class="form-label">Trạng thái</label>
                   <select class="form-select form-select" name="status" id="statusFormSelect">
-                    <option value="0" th:selected="${product.productStatus.ordinal() == 0}">Đang bán</option>
-                    <option value="1" th:selected="${product.productStatus.ordinal() == 1}">Đã ẩn</option>
-                    <option value="2" th:selected="${product.productStatus.ordinal() == 2}">Ngừng kinh doanh</option>
+                    <option value="0" th:selected="${product.productStatus == 0}">Đang bán</option>
+                    <option value="1" th:selected="${product.productStatus == 1}">Đã ẩn</option>
+                    <option value="2" th:selected="${product.productStatus == 2}">Ngừng kinh doanh</option>
                   </select>
                 </div>
               </div>

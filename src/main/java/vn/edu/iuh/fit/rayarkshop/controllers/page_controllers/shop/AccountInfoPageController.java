@@ -1,20 +1,17 @@
 package vn.edu.iuh.fit.rayarkshop.controllers.page_controllers.shop;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
-import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Person;
-import vn.edu.iuh.fit.rayarkshop.models.requests.AccountInfoUpdateRequest;
-import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 
 @Controller
@@ -22,26 +19,25 @@ import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 public class AccountInfoPageController {
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private PersonService personService;
 
 
     @GetMapping("")
-    public ModelAndView accountInfoPage() {
+    public ModelAndView accountInfoPage() throws FirebaseAuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String uid = authentication.getName();
 
-        Account account = accountService.getAccountByUserNameOrEmail(username);
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
-        if(account == null)
+        Person person = personService.findByUid(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.addObject("account", account);
-        modelAndView.addObject("person", account.getPerson());
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("person", person);
 
         modelAndView.setViewName("shop/account-info");
 

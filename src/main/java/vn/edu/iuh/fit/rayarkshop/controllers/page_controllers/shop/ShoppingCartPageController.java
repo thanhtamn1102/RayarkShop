@@ -34,18 +34,19 @@ public class ShoppingCartPageController {
     private ShippingAddressService shippingAddressService;
 
     @Autowired
-    private AccountService accountService;
+    private PersonService personService;
 
     @GetMapping("")
     public ModelAndView shoppingCartPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
-            throw new RuntimeException("Account Not Found");
+        Person person = personService.findByUid(uid);
 
-        int customerId = account.getPerson().getId();
+        if(person == null)
+            throw new RuntimeException("Person Not Found");
+
+        int customerId = person.getId();
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
         List<ShoppingCartItem> shoppingCartItems = shoppingCartItemService.getAllByCustomerId(customerId);
@@ -63,24 +64,24 @@ public class ShoppingCartPageController {
         return modelAndView;
     }
 
-    @PostMapping("/removeCartItem")
-    public ModelAndView removeCartItem(@RequestParam(defaultValue = "1") int customerId,
-                                 @RequestParam long cartItemId) {
-        int i = shoppingCartItemService.removeById(cartItemId);
-
-        if(i == 0)
-            throw new NotFoundException("Cart Item Not Found");
-
-        List<ShoppingCartItem> shoppingCartItems = shoppingCartItemService.getAllByCustomerId(customerId);
-
-        ModelAndView modelAndView = new ModelAndView();
-
-        modelAndView.addObject("shoppingCartItems", shoppingCartItems);
-
-        modelAndView.setViewName("shop/cart");
-
-        return modelAndView;
-    }
+//    @PostMapping("/removeCartItem")
+//    public ModelAndView removeCartItem(@RequestParam(defaultValue = "1") int customerId,
+//                                 @RequestParam long cartItemId) {
+//        int i = shoppingCartItemService.removeById(cartItemId);
+//
+//        if(i == 0)
+//            throw new NotFoundException("Cart Item Not Found");
+//
+//        List<ShoppingCartItem> shoppingCartItems = shoppingCartItemService.getAllByCustomerId(customerId);
+//
+//        ModelAndView modelAndView = new ModelAndView();
+//
+//        modelAndView.addObject("shoppingCartItems", shoppingCartItems);
+//
+//        modelAndView.setViewName("shop/cart");
+//
+//        return modelAndView;
+//    }
 
     @GetMapping("/getAllByCustomerId")
     public ResponseEntity<?> getAllByCustomerId(@RequestParam int customerId) {

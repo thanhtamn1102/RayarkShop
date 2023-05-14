@@ -16,4 +16,9 @@ public class PersonServiceImpl implements PersonService {
     public Person save(Person person) {
         return personRepository.save(person);
     }
+
+    @Override
+    public Person findByUid(String uid) {
+        return personRepository.findFirstByUid(uid);
+    }
 }

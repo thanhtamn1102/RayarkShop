@@ -1,10 +1,12 @@
 package vn.edu.iuh.fit.rayarkshop.controllers.page_controllers.shop;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
 import vn.edu.iuh.fit.rayarkshop.models.*;
-import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.CustomerService;
+import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 import vn.edu.iuh.fit.rayarkshop.services.ShippingAddressService;
 import vn.edu.iuh.fit.rayarkshop.utils.VnProvincesApiService;
 
@@ -30,21 +32,22 @@ public class AddressManagerPageController {
     private CustomerService customerService;
 
     @Autowired
-    private VnProvincesApiService vnProvincesApiService;
+    private PersonService personService;
 
     @Autowired
-    private AccountService accountService;
+    private VnProvincesApiService vnProvincesApiService;
 
     @GetMapping("")
-    public ModelAndView addressManagerPage() {
+    public ModelAndView addressManagerPage() throws FirebaseAuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
-        int customerId = account.getPerson().getId();
+        int customerId = personService.findByUid(uid).getId();
 
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddressesByCustomerId(customerId);
 
@@ -82,16 +85,17 @@ public class AddressManagerPageController {
                              @RequestParam String provinceId,
                              @RequestParam String districtId,
                              @RequestParam String wardId,
-                             @RequestParam String address) {
+                             @RequestParam String address) throws FirebaseAuthException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
-        int customerId = account.getPerson().getId();
+        int customerId = personService.findByUid(uid).getId();
 
         Customer customer = customerService.getById(customerId);
 

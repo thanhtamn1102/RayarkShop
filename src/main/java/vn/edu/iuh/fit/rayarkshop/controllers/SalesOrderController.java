@@ -41,9 +41,6 @@ public class SalesOrderController {
     private ShoppingCartItemService shoppingCartItemService;
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -55,13 +52,14 @@ public class SalesOrderController {
     @Autowired
     private ProductReviewImageService productReviewImageService;
 
+    @Autowired
+    private PersonService personService;
 
     @PostMapping("/add")
     public ResponseEntity<?> addSalesOrderService(@RequestBody SalesOrderRequest salesOrderRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int customerId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int customerId = personService.findByUid(uid).getId();
 
         Customer customer = customerService.getById(customerId);
         ShippingAddress shippingAddress = shippingAddressService.getById(salesOrderRequest.getShippingAddressId());
@@ -96,9 +94,8 @@ public class SalesOrderController {
         boolean clearShoppingCart = (boolean) requestBody.get("clearShoppingCart");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int personId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int personId = personService.findByUid(uid).getId();
         Customer customer = customerService.getByPersonId(personId);
 
         SalesOrder salesOrder = salesOrderService.findById(salesOrderId);

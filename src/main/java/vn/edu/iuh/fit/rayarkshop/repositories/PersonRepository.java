@@ -7,4 +7,6 @@ import vn.edu.iuh.fit.rayarkshop.models.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
+    Person findFirstByUid(String uid);
+
 }

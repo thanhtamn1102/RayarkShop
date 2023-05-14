@@ -36,22 +36,6 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
         return new Tika();
     }
 
-    @Autowired
-    public void FirebaseStorageServiceImpl() {
-        try {
-            ClassPathResource serviceAccount = new ClassPathResource(SERVICE_ACCOUNT_FILE);
-
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
-                    .setStorageBucket(BUCKET_NAME)
-                    .build();
-
-            FirebaseApp.initializeApp(options);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     @Override
     public String uploadFile(MultipartFile file, String fileName) throws IOException {
         InputStream inputStream = new BufferedInputStream(file.getInputStream());

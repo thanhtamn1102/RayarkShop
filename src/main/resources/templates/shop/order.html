@@ -325,7 +325,7 @@
                 </div>
                 <div class="modal-body">
                     <h3 class="text-danger">Đã hủy đơn hàng</h3>
-                    <h5>vào <span th:text="${salesOrder.getOrderCancelDetail().timestamp.toString()}"></span></h5>
+                    <h5>vào <span th:if="${salesOrder.orderCancelDetail.timestamp != null}" th:text="${salesOrder.orderCancelDetail.timestamp}"></span></h5>
 
                     <div class="table-responsive mt-3">
                         <table class="table">
@@ -336,11 +336,11 @@
                             </tr>
                             <tr class="">
                                 <td scope="row">Yêu cầu vào</td>
-                                <td class="text-right" th:text="${salesOrder.getOrderCancelDetail().timestamp.toString()}"></td>
+                                <td class="text-right" th:text="${salesOrder.orderCancelDetail.timestamp}"></td>
                             </tr>
                             <tr class="">
                                 <td scope="row">Lý do</td>
-                                <td class="text-right" th:text="${salesOrder.getOrderCancelDetail().reason}"></td>
+                                <td class="text-right" th:text="${salesOrder.orderCancelDetail.reason}"></td>
                             </tr>
                             </tbody>
                         </table>

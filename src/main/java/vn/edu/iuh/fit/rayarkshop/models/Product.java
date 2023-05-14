@@ -72,6 +72,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductOption> productOptions;
 
+    @Column(name = "product_status", nullable = true)
     private int productStatus;
 
     public Product(String name, double importPrice, String sku, String description, Brand brand, List<ProductCategory> productCategories) {

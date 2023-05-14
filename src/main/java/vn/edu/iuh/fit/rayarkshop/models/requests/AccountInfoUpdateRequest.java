@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AccountInfoUpdateRequest {
 
-    private String userName;
     private String fullName;
     private String phone;
     private boolean gender;

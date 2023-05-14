@@ -29,13 +29,13 @@ public class ShoppingCartController {
     private ProductService productService;
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private ProductInventoryService productInventoryService;
 
     @Autowired
     private ProductVariationProductOptionValueService productVariationProductOptionValueService;
+
+    @Autowired
+    private PersonService personService;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody AddToCartRequest addToCartRequest) {
@@ -43,9 +43,8 @@ public class ShoppingCartController {
             return ResponseEntity.ok(Boolean.FALSE);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int personId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int personId = personService.findByUid(uid).getId();
         Customer customer = customerService.getByPersonId(personId);
 
         ProductVariationProductOptionValue variationProductOptionValue =

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý sản phẩm - Rayark</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}" />
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/notification.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/order-manager.css}">
+
+</head>
+
+<body>
+<div class="wrapper container-fluid p-0">
+  <div th:replace="admin/fragments/admin-header :: admin-header"></div>
+
+  <div class="main px-5 py-3">
+    <div class="row">
+      <div class="col-2 py-3">
+        <div class="row">
+          <div class="col-12">
+            <div th:replace="admin/fragments/admin-left-nav :: admin-left-nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 p-5 bg-white rounded">
+        <h3>Admin</h3>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="admin/fragments/admin-footer :: admin-footer"></div>
+
+  <div th:replace="fragments/notification :: notification"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://kit.fontawesome.com/ed7f962f1f.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/notification.js}"></script>
+<script th:src="@{/admin/js/order-manager.js}"></script>
+
+</body>
+</html>

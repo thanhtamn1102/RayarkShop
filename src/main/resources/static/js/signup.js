@@ -3,14 +3,12 @@ $(function() {
 
     let txtFullName= $('#txtFullName');
     let txtPhone = $('#txtPhone');
-    let txtUserName = $('#txtUserName');
     let txtEmail = $('#txtEmail');
     let txtPassword = $('#txtPassword');
     let txtConfirmPassword = $('#txtConfirmPassword');
 
     let FullNameNotification = $('#FullNameNotification');
     let PhoneNotification = $('#PhoneNotification');
-    let UserNameNotification = $('#UserNameNotification');
     let EmailNontification = $('#EmailNontification');
     let PasswordNontification = $('#PasswordNontification');
     let ConfirmPasswordNontification = $('#ConfirmPasswordNontification');
@@ -42,19 +40,6 @@ $(function() {
         PhoneNotification.removeClass("text-danger");
         return true;
     }
-
-    function checkUserName() {
-        if(txtUserName.val() == "")
-        {
-            UserNameNotification.html("Không được để trống");
-            UserNameNotification.addClass("text-danger");
-            return false;
-        }
-
-        UserNameNotification.html("Username sử dụng khi đăng nhập");
-        UserNameNotification.removeClass("text-danger");
-        return true;
-    };
 
     function checkEmail() {
         if(txtEmail.val() == "")
@@ -113,8 +98,6 @@ $(function() {
 
     txtPhone.blur(function () {checkPhone()});
 
-    txtUserName.blur(function () {checkUserName()});
-
     txtEmail.blur(function() {checkEmail()});
 
     txtPassword.blur(function() {checkPassword()});
@@ -127,10 +110,6 @@ $(function() {
 
     txtPhone.keyup(function () {
         checkPhone();
-    });
-
-    txtUserName.keyup(function () {
-        checkUserName();
     });
 
     txtEmail.keyup(function() {
@@ -146,7 +125,7 @@ $(function() {
     });
 
     btnSignup.on('click', function () {
-        if(checkUserName() && checkEmail() && checkPassword() && checkConfirmPassword()) {
+        if(checkEmail() && checkPassword() && checkConfirmPassword()) {
             $.ajax({
                 url: '/api/accounts/signup/user-account',
                 type: 'POST',
@@ -154,7 +133,6 @@ $(function() {
                 data: JSON.stringify({
                     fullName: txtFullName.val(),
                     phone: txtPhone.val(),
-                    userName: txtUserName.val(),
                     email: txtEmail.val(),
                     password: txtPassword.val(),
                     confirmPassword: txtConfirmPassword.val()
@@ -164,9 +142,6 @@ $(function() {
                         window.location.href = location.origin + "/login";
                     } else if(data == 0) {
                         showMessage("Lỗi: Đã có lỗi xảy ra vui lòng thử lại sau");
-                    } else if(data == -1) {
-                        UserNameNotification.html("Username đã tồn tại");
-                        UserNameNotification.addClass("text-danger");
                     } else if(data == -2) {
                         EmailNontification.html("Email đã được đăng kí tài khoản");
                         EmailNontification.addClass("text-danger");

@@ -21,6 +21,9 @@ public class Person {
     @EqualsAndHashCode.Include
     private int id;
 
+    @Column(name = "uid", length = 255, unique = true)
+    private String uid;
+
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 
@@ -42,7 +45,8 @@ public class Person {
     @Column(name = "birthday")
     private LocalDate birthday;
 
-    public Person(String firstName, String middleName, String lastName, String phone, String email) {
+    public Person(String uid, String firstName, String middleName, String lastName, String phone, String email) {
+        this.uid = uid;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

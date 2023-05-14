@@ -176,9 +176,6 @@ $(document).ready(function() {
         if(importPrice == "") {
             importPriceNotification.html("Không được để trống");
             return false;
-        } else if(isNaN(importPrice)) {
-            importPriceNotification.html("Giá nhập phải là số");
-            return false;
         } else if(parseFloat(importPrice) <= 0) {
             importPriceNotification.html("Giá nhập phải > 0");
             return false;
@@ -190,9 +187,6 @@ $(document).ready(function() {
     function checkQuantity(quantity) {
         if(quantity == "") {
             quantityNotification.html("Không được để trống");
-            return false;
-        } else if(isNaN(quantity)) {
-            quantityNotification.html("Số lượng phải là số");
             return false;
         } else if(parseFloat(quantity) <= 0) {
             quantityNotification.html("Số lượng phải > 0");

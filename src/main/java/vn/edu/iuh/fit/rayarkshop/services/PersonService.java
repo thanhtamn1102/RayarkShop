@@ -8,4 +8,6 @@ public interface PersonService {
 
     Person save(Person person);
 
+    Person findByUid(String uid);
+
 }

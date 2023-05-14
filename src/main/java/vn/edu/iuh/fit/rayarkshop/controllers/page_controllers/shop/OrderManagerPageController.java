@@ -1,20 +1,19 @@
 package vn.edu.iuh.fit.rayarkshop.controllers.page_controllers.shop;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
-import vn.edu.iuh.fit.rayarkshop.models.Account;
-import vn.edu.iuh.fit.rayarkshop.models.OrderStatus;
 import vn.edu.iuh.fit.rayarkshop.models.SalesOrder;
-import vn.edu.iuh.fit.rayarkshop.services.AccountService;
+import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 import vn.edu.iuh.fit.rayarkshop.services.SalesOrderService;
 
 import java.util.ArrayList;
@@ -28,18 +27,19 @@ public class OrderManagerPageController {
     private SalesOrderService salesOrderService;
 
     @Autowired
-    private AccountService accountService;
+    private PersonService personService;
 
     @GetMapping("")
-    public ModelAndView orderManagerPage() {
+    public ModelAndView orderManagerPage() throws FirebaseAuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
-        int customerId = account.getPerson().getId();
+        int customerId = personService.findByUid(uid).getId();
 
         List<SalesOrder> salesOrders = salesOrderService.findAllByCustomerId(customerId);
         List<SalesOrder> dsDonHangChoXacNhan = new ArrayList<>();
@@ -91,15 +91,16 @@ public class OrderManagerPageController {
     }
 
     @GetMapping("/search")
-    public ModelAndView searchOrder(@RequestParam String searchKey) {
+    public ModelAndView searchOrder(@RequestParam String searchKey) throws FirebaseAuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
-        int customerId = account.getPerson().getId();
+        int customerId = personService.findByUid(uid).getId();
 
         long orderId = -1;
         try {

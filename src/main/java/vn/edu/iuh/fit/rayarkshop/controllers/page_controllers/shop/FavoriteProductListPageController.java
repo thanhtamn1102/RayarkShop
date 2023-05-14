@@ -1,19 +1,19 @@
 package vn.edu.iuh.fit.rayarkshop.controllers.page_controllers.shop;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.iuh.fit.rayarkshop.exceptions.NotFoundException;
-import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.FavoriteProductListItem;
-import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.FavoriteProductListItemService;
+import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 
 import java.util.List;
 
@@ -25,18 +25,19 @@ public class FavoriteProductListPageController {
     private FavoriteProductListItemService favoriteProductListItemService;
 
     @Autowired
-    private AccountService accountService;
+    private PersonService personService;
 
     @GetMapping("")
-    public ModelAndView favoriteProductListManagerPage() {
+    public ModelAndView favoriteProductListManagerPage() throws FirebaseAuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+        String uid = authentication.getName();
 
-        if(account == null)
+        UserRecord user = FirebaseAuth.getInstance().getUser(uid);
+
+        if(user == null)
             throw new NotFoundException("Not Found Exception");
 
-        int customerId = account.getPerson().getId();
+        int customerId = personService.findByUid(uid).getId();
 
         List<FavoriteProductListItem> favoriteProductListItems = favoriteProductListItemService.getByCustomer(customerId);
 

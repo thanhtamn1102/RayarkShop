@@ -1,5 +1,8 @@
 package vn.edu.iuh.fit.rayarkshop.controllers.page_controllers.shop;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,26 +41,26 @@ public class ProductPageController {
     private FavoriteProductListItemService favoriteProductListItemService;
 
     @Autowired
-    private AccountService accountService;
+    private ProductReviewService productReviewService;
 
     @Autowired
-    private ProductReviewService productReviewService;
+    private PersonService personService;
 
     @GetMapping("")
     public ModelAndView productPage(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "9") int size,
                                     @RequestParam(defaultValue = "name-asc") String sort,
                                     @RequestParam(name = "brands", required = false) Optional<List<Integer>> brandFilters,
-                                    @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters) {
+                                    @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters) throws FirebaseAuthException {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()) {
-            String usernameOrEmail = authentication.getName();
-            Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+            String uid = authentication.getName();
+            UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
-            if(account != null) {
-                int customerId = account.getPerson().getId();
+            if(user != null) {
+                int customerId = personService.findByUid(uid).getId();
 
                 favoriteProductListItems = favoriteProductListItemService.getByCustomer(customerId).stream()
                         .map(favoriteProductListItem -> favoriteProductListItem.getProduct()).toList();
@@ -97,16 +100,16 @@ public class ProductPageController {
                                 @RequestParam(defaultValue = "name-asc") String sort,
                                 @RequestParam(name = "brands", required = false) Optional<List<Integer>> brandFilters,
                                 @RequestParam(name = "categories", required = false) Optional<List<Integer>> categoryFilters,
-                                @RequestParam String key) {
+                                @RequestParam String key) throws FirebaseAuthException {
         List<Product> favoriteProductListItems = new ArrayList<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()) {
-            String usernameOrEmail = authentication.getName();
-            Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+            String uid = authentication.getName();
+            UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
-            if(account != null) {
-                int customerId = account.getPerson().getId();
+            if(user != null) {
+                int customerId = personService.findByUid(uid).getId();
 
                 favoriteProductListItems = favoriteProductListItemService.getByCustomer(customerId).stream()
                         .map(favoriteProductListItem -> favoriteProductListItem.getProduct()).toList();
@@ -134,16 +137,16 @@ public class ProductPageController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getProduct(@PathVariable(name = "id") String id) {
+    public ModelAndView getProduct(@PathVariable(name = "id") String id) throws FirebaseAuthException {
         FavoriteProductListItem favoriteProductListItem = null;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()) {
-            String usernameOrEmail = authentication.getName();
-            Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
+            String uid = authentication.getName();
+            UserRecord user = FirebaseAuth.getInstance().getUser(uid);
 
-            if(account != null) {
-                int customerId = account.getPerson().getId();
+            if(user != null) {
+                int customerId =    personService.findByUid(uid).getId();
 
                 favoriteProductListItem = favoriteProductListItemService.getFavoriteProductListItemByCustomerIdAndProductId(customerId, Integer.parseInt(id));
             }

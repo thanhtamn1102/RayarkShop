@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import vn.edu.iuh.fit.rayarkshop.models.Account;
 import vn.edu.iuh.fit.rayarkshop.models.Customer;
 import vn.edu.iuh.fit.rayarkshop.models.FavoriteProductListItem;
 import vn.edu.iuh.fit.rayarkshop.models.Product;
-import vn.edu.iuh.fit.rayarkshop.services.AccountService;
 import vn.edu.iuh.fit.rayarkshop.services.CustomerService;
 import vn.edu.iuh.fit.rayarkshop.services.FavoriteProductListItemService;
+import vn.edu.iuh.fit.rayarkshop.services.PersonService;
 import vn.edu.iuh.fit.rayarkshop.services.ProductService;
 
 @RestController
@@ -29,17 +28,16 @@ public class FavoriteProductListController {
     private CustomerService customerService;
 
     @Autowired
-    private ProductService productService;
+    private PersonService personService;
 
     @Autowired
-    private AccountService accountService;
+    private ProductService productService;
 
     @GetMapping("/addToFavoriteList")
     public ResponseEntity<?> addToFavoriteList(@RequestParam int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int customerId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int customerId = personService.findByUid(uid).getId();
 
         Customer customer = customerService.getById(customerId);
         Product product = productService.findById(productId);
@@ -55,9 +53,8 @@ public class FavoriteProductListController {
     @GetMapping("/removeFromFavoriteList")
     public ResponseEntity<?> removeFromFavoriteList(@RequestParam int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usernameOrEmail = authentication.getName();
-        Account account = accountService.getAccountByUserNameOrEmail(usernameOrEmail);
-        int customerId = account.getPerson().getId();
+        String uid = authentication.getName();
+        int customerId = personService.findByUid(uid).getId();
 
         Integer b = favoriteProductListItemService.removeByCustomerIdAndProductId(customerId, productId);
         return ResponseEntity.ok(b == 1 ? Boolean.TRUE : Boolean.FALSE);

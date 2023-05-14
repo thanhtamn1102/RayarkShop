@@ -43,6 +43,9 @@ dependencies {
 
     // Firebase Storage
     implementation 'com.google.firebase:firebase-admin:8.0.0'
+
+    // https://mvnrepository.com/artifact/com.google.firebase/firebase-auth
+
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.7.0'
 }
 
